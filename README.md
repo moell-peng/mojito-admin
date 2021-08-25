@@ -1,105 +1,49 @@
-# Mojito
+# Mojito Admin
 
-Mojito 是一个基于 Laravel, Vue, Element UI 构建的后台管理系统。
+Mojito Admin 是一个基于 Vue3、 Element Plus、Vite 构建的后台管理系统模板，开箱即用，无过度封装，也可以用于学习参考。
 
 ## 截图
 
 ![mojito-admin.jpg](http://ww1.sinaimg.cn/large/7a679ca1gy1ggfdd1odgvj21420l20uj.jpg)
 
-## Demo
 
-登陆地址 http://mojito.moell.cn/admin/login ， 用户名 `mojito@gmail.com` ，密码 `mojito-demo`
+## 特性
 
-## 特征
-
-* 可快速衍生多个后台系统
+* 使用最新的Vue3、Vite2、Element Plus 等前端新技术开发
+* 支持国际化
+* Mock 内置模拟数据
+* 灵活的权限判断
 * 内置角色，权限，用户，菜单管理
-* API 权限精确至路由，页面权限精确到按钮或链接
-* 完善的PHPUnit测试
-* 前后端分离
 * 多标签页
-
-## 要求
-
-- Laravel  >= 7.0.0
-- Vue >= 2.5.17
-- Element >= 2.9.1
+* 无过度封装
+* 可选择基于 Laravel 开发的 [Mojito](https://github.com/moell-peng/mojito.git) 后端配合使用
 
 ## 安装
 
-首先安装laravel,并且确保你配置了正确的数据库连接。
+获取项目代码
 
 ```
-composer require moell/mojito
+git clone https://github.com/moell-peng/mojito-admin.git
 ```
 
-然后运行下面的命令来发布资源:
+安装依赖
 
 ```
-php artisan mojito:install
+cd mojito-admin
+yarn install
 ```
 
-命令执行成功会生成配置文件，数据迁移和构建SPA的文件。
-
-修改 `app/Http/Kernel.php` ：
+开发运行
 
 ```
-class Kernel extends HttpKernel
-{
-    protected $routeMiddleware = [
-        ...
-        'mojito.permission' => \Moell\Mojito\Http\Middleware\Authenticate::class,
-    ];
-
-    protected $middlewareGroups = [
-            ...
-            'api' => [
-                ...
-                \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            ],
-        ];
-}
+yarn dev
 ```
 
-执行数据迁移，数据填充
-
+打包
 ```
-php artisan migrate
-
-php artisan db:seed --class="Moell\Mojito\Database\MojitoTableSeeder"
+yarn build
 ```
 
-安装 Javscript 依赖
-
-```shell
-npm install
-# laravel < 8.0 以下
-npm install -D vue@^2.6.6 vuex@^3.0.1 vue-router@^3.0.1 vue-i18n@^8.1.0 localforage@^1.7.2 element-ui@^2.9.1
-
-# laravel 8.0 ~ 8.5.7
-npm install -D vue@^2.6.6 vuex@^3.0.1 vue-router@^3.0.1 vue-i18n@^8.1.0 localforage@^1.7.2 element-ui@^2.9.1 vue-template-compiler@^2.6.14 sass@^1.15.2 sass-loader@^8.0.0
-
-# laravel 8.5.7 以上
-npm install -D vue@^2.6.6 vuex@^3.0.1 vue-router@^3.0.1 vue-i18n@^8.1.0 vue-loader@^15.9.7 localforage@^1.7.2 element-ui@^2.9.1 vue-template-compiler@^2.6.14 sass@^1.35.1 sass-loader@^12.1.0
-```
-
-将 admin.js  添加到 webpack.mix.js 
-
-```
-mix.js('resources/js/admin.js', 'public/js');
-
-# laravel 8.5.7 以上
-mix.js('resources/js/admin.js', 'public/js').vue({ version: 2 });
-```
-
-运行 Mix
-
-```
-#npm run watch
-npm run production
-```
-
-后台登陆地址为 `http://localhost/admin/login`， 账号 `admin@gmail.com` , 密码 `secret`
 
 ## 打赏
 
