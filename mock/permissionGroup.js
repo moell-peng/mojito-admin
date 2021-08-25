@@ -1,0 +1,569 @@
+const groups = [
+  {id: 1, name: "管理员", created_at: "", updated_at: ""},
+  {id: 2, name: "角色", created_at: "", updated_at: ""},
+  {id: 3, name: "权限", created_at: "", updated_at: ""},
+  {id: 4, name: "菜单", created_at: "", updated_at: ""},
+  {id: 5, name: "权限组", created_at: "", updated_at: ""}
+];
+
+export default [
+  {
+    url: '/api/permission-group',
+    method: 'get',
+    response: ({ body, query }) => {
+      return {
+        data: groups,
+        meta: {
+          "current_page": 1,
+          "from": 1,
+          "last_page": 1,
+          "path": "/api/permission-group",
+          "per_page": 15,
+          "to": 1,
+          "total": 15
+        },
+      }
+    }
+  },
+  {
+    url: '/api/permission-group-all',
+    method: "get",
+    response: () => {
+      return {
+        data: groups,
+      }
+    }
+  },
+  {
+    url: '/api/permission-group/:id',
+    method: "delete",
+    statusCode: 204,
+  },
+  {
+    url: '/api/permission-group/:id',
+    method: "patch",
+    statusCode: 204,
+  },
+  {
+    url: '/api/permission-group',
+    method: "post",
+    statusCode: 201,
+  },
+  {
+    url: '/api/guard-name-for-permissions/:guardName',
+    method: "get",
+    response: () => {
+      return {
+        data: guardForPermissions,
+      }
+    }
+  },
+]
+
+
+
+const guardForPermissions = [{
+  "id": 1,
+  "name": "管理员",
+  "created_at": null,
+  "updated_at": null,
+  "permission": [{
+      "id": 1,
+      "name": "admin-user.index",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:30.000000Z",
+      "updated_at": "2021-08-21T03:03:30.000000Z",
+      "pg_id": 1,
+      "display_name": "列表",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 2,
+      "name": "admin-user.show",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:31.000000Z",
+      "updated_at": "2021-08-21T03:03:31.000000Z",
+      "pg_id": 1,
+      "display_name": "详细",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 3,
+      "name": "admin-user.store",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:31.000000Z",
+      "updated_at": "2021-08-21T03:03:31.000000Z",
+      "pg_id": 1,
+      "display_name": "添加",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 4,
+      "name": "admin-user.update",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:31.000000Z",
+      "updated_at": "2021-08-21T03:03:31.000000Z",
+      "pg_id": 1,
+      "display_name": "修改",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 5,
+      "name": "admin-user.destroy",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:31.000000Z",
+      "updated_at": "2021-08-21T03:03:31.000000Z",
+      "pg_id": 1,
+      "display_name": "删除",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 6,
+      "name": "admin-user.roles",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:31.000000Z",
+      "updated_at": "2021-08-21T03:03:31.000000Z",
+      "pg_id": 1,
+      "display_name": "用户角色列表",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 7,
+      "name": "admin-user.assign-roles",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:31.000000Z",
+      "updated_at": "2021-08-21T03:03:31.000000Z",
+      "pg_id": 1,
+      "display_name": "分配角色",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }]
+}, {
+  "id": 2,
+  "name": "角色",
+  "created_at": null,
+  "updated_at": null,
+  "permission": [{
+      "id": 8,
+      "name": "role.index",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:31.000000Z",
+      "updated_at": "2021-08-21T03:03:31.000000Z",
+      "pg_id": 2,
+      "display_name": "列表",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 9,
+      "name": "role.show",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:31.000000Z",
+      "updated_at": "2021-08-21T03:03:31.000000Z",
+      "pg_id": 2,
+      "display_name": "详细",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 10,
+      "name": "role.store",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:31.000000Z",
+      "updated_at": "2021-08-21T03:03:31.000000Z",
+      "pg_id": 2,
+      "display_name": "添加",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 11,
+      "name": "role.update",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:31.000000Z",
+      "updated_at": "2021-08-21T03:03:31.000000Z",
+      "pg_id": 2,
+      "display_name": "修改",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 12,
+      "name": "role.destroy",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:31.000000Z",
+      "updated_at": "2021-08-21T03:03:31.000000Z",
+      "pg_id": 2,
+      "display_name": "删除",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 13,
+      "name": "role.permissions",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:31.000000Z",
+      "updated_at": "2021-08-21T03:03:31.000000Z",
+      "pg_id": 2,
+      "display_name": "获取角色的权限",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 14,
+      "name": "role.assign-permissions",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:31.000000Z",
+      "updated_at": "2021-08-21T03:03:31.000000Z",
+      "pg_id": 2,
+      "display_name": "角色分配权限",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 15,
+      "name": "role.guard-name-roles",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:31.000000Z",
+      "updated_at": "2021-08-21T03:03:31.000000Z",
+      "pg_id": 2,
+      "display_name": "看守器对应的所有角色",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }]
+}, {
+  "id": 3,
+  "name": "权限",
+  "created_at": null,
+  "updated_at": null,
+  "permission": [{
+      "id": 16,
+      "name": "permission.index",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:31.000000Z",
+      "updated_at": "2021-08-21T03:03:31.000000Z",
+      "pg_id": 3,
+      "display_name": "列表",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 17,
+      "name": "permission.show",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:31.000000Z",
+      "updated_at": "2021-08-21T03:03:31.000000Z",
+      "pg_id": 3,
+      "display_name": "详细",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 18,
+      "name": "permission.store",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:31.000000Z",
+      "updated_at": "2021-08-21T03:03:31.000000Z",
+      "pg_id": 3,
+      "display_name": "添加",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 19,
+      "name": "permission.update",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:31.000000Z",
+      "updated_at": "2021-08-21T03:03:31.000000Z",
+      "pg_id": 3,
+      "display_name": "修改",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 20,
+      "name": "permission.destroy",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:31.000000Z",
+      "updated_at": "2021-08-21T03:03:31.000000Z",
+      "pg_id": 3,
+      "display_name": "删除",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }]
+}, {
+  "id": 4,
+  "name": "菜单",
+  "created_at": null,
+  "updated_at": null,
+  "permission": [{
+      "id": 21,
+      "name": "menu.index",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:31.000000Z",
+      "updated_at": "2021-08-21T03:03:31.000000Z",
+      "pg_id": 4,
+      "display_name": "列表",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 22,
+      "name": "menu.show",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:31.000000Z",
+      "updated_at": "2021-08-21T03:03:31.000000Z",
+      "pg_id": 4,
+      "display_name": "详细",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 23,
+      "name": "menu.store",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:31.000000Z",
+      "updated_at": "2021-08-21T03:03:31.000000Z",
+      "pg_id": 4,
+      "display_name": "添加",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 24,
+      "name": "menu.update",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:32.000000Z",
+      "updated_at": "2021-08-21T03:03:32.000000Z",
+      "pg_id": 4,
+      "display_name": "修改",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 25,
+      "name": "menu.destroy",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:32.000000Z",
+      "updated_at": "2021-08-21T03:03:32.000000Z",
+      "pg_id": 4,
+      "display_name": "删除",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }]
+}, {
+  "id": 5,
+  "name": "权限组",
+  "created_at": null,
+  "updated_at": null,
+  "permission": [{
+      "id": 26,
+      "name": "permission-group.index",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:32.000000Z",
+      "updated_at": "2021-08-21T03:03:32.000000Z",
+      "pg_id": 5,
+      "display_name": "列表",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 27,
+      "name": "permission-group.show",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:32.000000Z",
+      "updated_at": "2021-08-21T03:03:32.000000Z",
+      "pg_id": 5,
+      "display_name": "详细",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 28,
+      "name": "permission-group.store",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:32.000000Z",
+      "updated_at": "2021-08-21T03:03:32.000000Z",
+      "pg_id": 5,
+      "display_name": "添加",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 29,
+      "name": "permission-group.update",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:32.000000Z",
+      "updated_at": "2021-08-21T03:03:32.000000Z",
+      "pg_id": 5,
+      "display_name": "修改",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 30,
+      "name": "permission-group.destroy",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:32.000000Z",
+      "updated_at": "2021-08-21T03:03:32.000000Z",
+      "pg_id": 5,
+      "display_name": "删除",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 31,
+      "name": "permission-group.guard-name-for-permission",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:32.000000Z",
+      "updated_at": "2021-08-21T03:03:32.000000Z",
+      "pg_id": 5,
+      "display_name": "获取看守器权限",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }, {
+      "id": 32,
+      "name": "permission-group.all",
+      "guard_name": "admin",
+      "created_at": "2021-08-21T03:03:32.000000Z",
+      "updated_at": "2021-08-21T03:03:32.000000Z",
+      "pg_id": 5,
+      "display_name": "所有权限组",
+      "icon": null,
+      "sequence": null,
+      "created_name": null,
+      "updated_name": null,
+      "description": null
+  }]
+}]
+
+const rolePermission =  [{
+  "id": 1,
+  "pg_id": 1,
+  "name": "admin-user.index",
+  "guard_name": "admin",
+  "display_name": "列表",
+  "group": null,
+  "icon": null,
+  "sequence": null,
+  "description": null,
+  "created_name": null,
+  "updated_name": null,
+  "created_at": "2021-08-21 03:03:30",
+  "updated_at": "2021-08-21 03:03:30"
+}, {
+  "id": 2,
+  "pg_id": 1,
+  "name": "admin-user.show",
+  "guard_name": "admin",
+  "display_name": "详细",
+  "group": null,
+  "icon": null,
+  "sequence": null,
+  "description": null,
+  "created_name": null,
+  "updated_name": null,
+  "created_at": "2021-08-21 03:03:31",
+  "updated_at": "2021-08-21 03:03:31"
+}, {
+  "id": 3,
+  "pg_id": 1,
+  "name": "admin-user.store",
+  "guard_name": "admin",
+  "display_name": "添加",
+  "group": null,
+  "icon": null,
+  "sequence": null,
+  "description": null,
+  "created_name": null,
+  "updated_name": null,
+  "created_at": "2021-08-21 03:03:31",
+  "updated_at": "2021-08-21 03:03:31"
+}, {
+  "id": 4,
+  "pg_id": 1,
+  "name": "admin-user.update",
+  "guard_name": "admin",
+  "display_name": "修改",
+  "group": null,
+  "icon": null,
+  "sequence": null,
+  "description": null,
+  "created_name": null,
+  "updated_name": null,
+  "created_at": "2021-08-21 03:03:31",
+  "updated_at": "2021-08-21 03:03:31"
+},]

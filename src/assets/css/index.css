@@ -1,0 +1,7 @@
+.custom-scroll-drawer .el-drawer__body {
+  height: calc(100% - 80px);
+}
+.pagination-right {
+  margin-top: 10px;
+  text-align: right;
+}
