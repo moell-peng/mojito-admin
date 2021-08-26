@@ -2,6 +2,12 @@
 
 Mojito Admin 是一个基于 Vue3、 Element Plus、Vite 构建的后台管理系统模板，开箱即用，无过度封装，也可以用于学习参考。
 
+## 预览
+[Demo](http://mojito.moell.cn)
+
+## 文档地址
+[文档](https://moell-peng.github.io/mojito-doc)
+
 ## 截图
 
 ![mojito-admin.jpg](http://ww1.sinaimg.cn/large/7a679ca1gy1ggfdd1odgvj21420l20uj.jpg)

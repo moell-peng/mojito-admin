@@ -29,7 +29,9 @@
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item>Github</el-dropdown-item>
+              <a href='https://github.com/moell-peng/mojito-admin' target="_blank">
+                <el-dropdown-item>Github</el-dropdown-item>
+              </a>
               <el-dropdown-item @click="openChangePassword">{{ $t('changePassword') }}</el-dropdown-item>
               <el-dropdown-item @click="logout">{{ $t('logout') }}</el-dropdown-item>
             </el-dropdown-menu>
