@@ -10,7 +10,7 @@ Mojito Admin 是一个基于 Vue3、 Element Plus、Vite 构建的后台管理�
 
 ## 截图
 
-![mojito-admin.jpg](http://ww1.sinaimg.cn/large/7a679ca1gy1ggfdd1odgvj21420l20uj.jpg)
+![mojito.png](http://ww1.sinaimg.cn/large/7a679ca1gy1gtu09c4avej21590kstdb.jpg)
 
 
 ## 特性
