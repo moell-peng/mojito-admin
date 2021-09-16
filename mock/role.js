@@ -90,5 +90,19 @@ export default [
         }]
       }
     }
+  },
+  {
+    url: '/api/role/:id/menus',
+    method: 'get',
+    response: () => {
+      return {
+        data: [1,2,3,4,5,6]
+      }
+    }
+  },
+  {
+    url: '/api/role/:id/togglemenus',
+    method: 'put',
+    statusCode: 204
   }
 ]

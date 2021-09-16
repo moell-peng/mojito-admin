@@ -98,7 +98,8 @@ export default {
 </script>
 <style lang="scss" scoped>
   .page-header {
-    padding:20px;
+    margin: 20px;
+    padding: 20px;
     border-bottom: 1px solid #ebeef5;
     box-shadow:  0 2px 12px 0 rgba(0, 0, 0, 0.1);
     h3 {

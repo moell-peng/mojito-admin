@@ -52,6 +52,23 @@
           <i :class="scope.row.icon"></i>
         </template>
       </el-table-column>
+      
+      <el-table-column
+        align="center"
+        :label="$t('display')"
+      >
+        <template #default="scope">
+          <el-switch
+            v-model="scope.row.is_display"
+            disabled
+            :active-text="$t('yes')"
+            :active-value="1"
+            :inactive-text="$t('no')"
+            :inactive-value="0"
+          />
+        </template>
+      </el-table-column>
+      
       <el-table-column
               align="center"
               :label="$t('actions')">

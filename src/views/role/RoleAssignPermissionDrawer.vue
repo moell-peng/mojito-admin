@@ -132,7 +132,7 @@ export default defineComponent({
       groupPermissions,
       radio,
       change,
-      loading,
+      loading
     }
   },
 })

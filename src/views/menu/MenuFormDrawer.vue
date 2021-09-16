@@ -19,12 +19,21 @@
       <el-form-item :label="$t('icon')" prop="icon">
         <el-input v-model="form.icon"></el-input>
       </el-form-item>
+      <el-form-item :label="$t('display')" prop="is_display" :label-width="formLabelWidth">
+        <el-switch
+          v-model="form.is_display"
+          :active-text="$t('yes')"
+          :active-value="1"
+          :inactive-text="$t('no')"
+          :inactive-value="0"
+        />
+      </el-form-item>
       <el-form-item :label="$t('sequence')" prop="sequence">
         <el-input v-model.number="form.sequence"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button @click="dialogformVisible = false" size="small">{{ $t('cancel') }}</el-button>
+      <el-button @click="drawer = false" size="small">{{ $t('cancel') }}</el-button>
       <el-button type="primary" @click="handleAdd" v-if="actionType === 'add'" size="small">{{ $t('confirm') }}</el-button>
       <el-button type="primary" @click="handleEdit" v-if="actionType === 'edit'" size="small">{{ $t('confirm') }}</el-button>
     </template>
@@ -71,6 +80,7 @@ export default defineComponent({
       guard_name: null,
       parent_id: null,
       icon: null,
+      is_display: null,
       sequence: null,
     }
     const form = ref(defualtForm)
@@ -99,6 +109,7 @@ export default defineComponent({
         guard_name: row.guard_name,
         parent_id: row.parent_id,
         icon: row.icon,
+        is_display: row.is_display,
         sequence: row.sequence,
       }
     })
