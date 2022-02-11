@@ -2,15 +2,15 @@
   <custom-scroll-drawer :title="$t('meta.title.permissionGroup')" :full-content="true" v-model="drawer" direction="rtl" :size="800">
     <table-action>
       <template #action> 
-        <el-button type="primary" v-if="hasAddBtn" plain size="small"  @click="handleAdd" icon="el-icon-plus"></el-button>
-        <el-button type="primary" plain size="small"  @click="requestData" icon="el-icon-refresh"></el-button>
+        <el-button type="primary" v-if="hasAddBtn" plain  @click="handleAdd" :icon="Plus"></el-button>
+        <el-button type="primary" plain  @click="requestData" :icon="Refresh"></el-button>
       </template>
     </table-action>
     <el-table
             :data="table.data"
             v-loading="table.loading"
             border
-            size="small"
+           
             style="width: 100%">
       <el-table-column
               prop="name"
@@ -30,12 +30,11 @@
         <template #default="scope">
           <el-button
                   v-if="hasEditBtn"
-                  size="mini"
                   type="text"
                   @click="handleEdit(scope.row)">{{ $t('edit') }}</el-button>
           <el-popconfirm v-if="hasDeleteBtn" :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
             <template #reference>
-              <el-button size="mini" type="text">{{ $t('delete') }}</el-button>
+              <el-button type="text">{{ $t('delete') }}</el-button>
             </template>
           </el-popconfirm>
         </template>
@@ -55,9 +54,9 @@
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button @click="dialogVisible = false" size="small">{{ $t('cancel') }}</el-button>
-      <el-button type="primary" @click="storePermissionGroup" v-if="dialogAction === 'add'" size="small">{{ $t('confirm') }}</el-button>
-      <el-button type="primary" @click="updatePermissionGroup" v-if="dialogAction === 'edit'" size="small">{{ $t('confirm') }}</el-button>
+      <el-button @click="dialogVisible = false">{{ $t('cancel') }}</el-button>
+      <el-button type="primary" @click="storePermissionGroup" v-if="dialogAction === 'add'">{{ $t('confirm') }}</el-button>
+      <el-button type="primary" @click="updatePermissionGroup" v-if="dialogAction === 'edit'">{{ $t('confirm') }}</el-button>
     </template>
   </el-dialog>
   </custom-scroll-drawer>
@@ -70,6 +69,7 @@ import { tableDefaultData, tableDataFormat } from '@/utils/table'
 import { getPermissionGroupList, editPermissionGroup, addPermissionGroup, deletePermissionGroup } from '@/api/permissionGroup'
 import notice from '@/utils/notice'
 import TableAction from '@/components/Table/TableAction.vue'
+import { Refresh, Plus} from "@element-plus/icons-vue"
 
 export default defineComponent({
   components: { 
@@ -169,6 +169,8 @@ export default defineComponent({
       storePermissionGroup,
       handleDelete,
       requestData,
+      Refresh,
+      Plus,
       hasAddBtn: computed(() => store.getters.hasPermission("permission-group.store")),
       hasEditBtn: computed(() => store.getters.hasPermission("permission-group.update")),
       hasDeleteBtn: computed(() => store.getters.hasPermission("permission-group.destroy")),

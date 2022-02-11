@@ -1,6 +1,6 @@
 <template>
   <custom-scroll-drawer :title="action == 'add' ? $t('add') : $t('edit')" v-model="drawer" direction="rtl" :size="500">
-    <el-form :model="form" :rules="rules" ref="formRef" label-width="110px" size="small">
+    <el-form :model="form" :rules="rules" ref="formRef" label-width="110px">
       <el-form-item :label="$t('name')" prop="name">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
@@ -24,9 +24,9 @@
       </el-form-item> 
     </el-form>
     <template #footer>
-      <el-button @click="drawer = false" size="small">{{ $t('cancel') }}</el-button>
-      <el-button type="primary" @click="handleAddAdminUser" v-if="action ==='add'" size="small">{{ $t('confirm') }}</el-button>
-      <el-button type="primary" @click="handleEditAdminUser" v-if="action ==='edit'" size="small">{{ $t('confirm') }}</el-button>
+      <el-button @click="drawer = false">{{ $t('cancel') }}</el-button>
+      <el-button type="primary" @click="handleAddAdminUser" v-if="action ==='add'">{{ $t('confirm') }}</el-button>
+      <el-button type="primary" @click="handleEditAdminUser" v-if="action ==='edit'">{{ $t('confirm') }}</el-button>
     </template>
   </custom-scroll-drawer>
 </template>

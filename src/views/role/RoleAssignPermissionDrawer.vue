@@ -21,8 +21,8 @@
       </el-card>
     </div>
     <template #footer>
-      <el-button @click="drawer = false" size="small">{{ $t('cancel') }}</el-button>
-      <el-button type="primary" @click="assignPermission" size="small">{{ $t('confirm') }}</el-button>
+      <el-button @click="drawer = false">{{ $t('cancel') }}</el-button>
+      <el-button type="primary" @click="assignPermission">{{ $t('confirm') }}</el-button>
     </template>
   </custom-scroll-drawer>
 </template>

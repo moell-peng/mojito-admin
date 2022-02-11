@@ -1,6 +1,6 @@
 <template>
-  <custom-scroll-drawer :title="actionType === 'add' ? $t('add') : $t('edit') " v-model="drawer" direction="rtl" :size="500">
-    <el-form :model="form" :rules="rules" ref="formRef" label-width="110px" size="small">
+  <custom-scroll-drawer :title="actionType === 'add' ? $t('add') : $t('edit') " v-model="drawer" direction="rtl" :size="800">
+    <el-form :model="form" :rules="rules" ref="formRef" label-width="110px">
       <el-form-item :label="$t('name')" prop="name">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
@@ -24,9 +24,9 @@
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button @click="dialogformVisible = false" size="small">{{ $t('cancel') }}</el-button>
-      <el-button type="primary" @click="handleAdd" v-if="actionType === 'add'" size="small">{{ $t('confirm') }}</el-button>
-      <el-button type="primary" @click="handleEdit" v-if="actionType === 'edit'" size="small">{{ $t('confirm') }}</el-button>
+      <el-button @click="dialogformVisible = false">{{ $t('cancel') }}</el-button>
+      <el-button type="primary" @click="handleAdd" v-if="actionType === 'add'">{{ $t('confirm') }}</el-button>
+      <el-button type="primary" @click="handleEdit" v-if="actionType === 'edit'">{{ $t('confirm') }}</el-button>
     </template>
   </custom-scroll-drawer>
 </template>
@@ -131,7 +131,7 @@ export default defineComponent({
           props.row.parent_id = form.value.parent_id
           props.row.icon = form.value.icon
           props.row.sequence = form.value.sequence
-          form.value = defualtForm
+          //form.value = defualtForm
         })
       })
     }

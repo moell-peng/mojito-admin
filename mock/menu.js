@@ -32,7 +32,7 @@ const menus = () => {
       {
           "id": 1,
           "parent_id": 0,
-          "icon": "el-icon-monitor",
+          "icon": "Orange",
           "uri": "/dashboard",
           "is_link": 0,
           "permission_name": null,
@@ -45,7 +45,7 @@ const menus = () => {
       {
           "id": 2,
           "parent_id": 0,
-          "icon": "el-icon-setting",
+          "icon": "Setting",
           "uri": "/admin",
           "is_link": 0,
           "permission_name": null,

@@ -7,8 +7,9 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^0.2.7",
     "axios": "^0.21.1",
-    "element-plus": "^1.0.2-beta.65",
+    "element-plus": "^2.0.1",
     "localforage": "^1.9.0",
     "vue": "^3.0.5",
     "vue-i18n": "^9.1.7",
@@ -20,6 +21,8 @@
     "@vue/compiler-sfc": "^3.0.5",
     "mockjs": "^1.1.0",
     "sass": "^1.30.0",
+    "unplugin-auto-import": "^0.5.11",
+    "unplugin-vue-components": "^0.17.18",
     "vite": "^2.4.4",
     "vite-plugin-mock": "^2.9.4"
   }

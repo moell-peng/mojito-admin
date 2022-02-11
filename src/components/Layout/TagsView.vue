@@ -1,20 +1,14 @@
 <template>
   <div class="tags-box">
     <div class="tags-left-btn" @click="tagsScroll(300)">
-      <el-button :plain="true">
-        <i class="el-icon-arrow-left"></i>
-      </el-button>
+      <el-button plain :icon="ArrowLeft"></el-button>
     </div>
     <div class="tags-right-btn" @click="tagsScroll(-300)">
-      <el-button :plain="true">
-        <i class="el-icon-arrow-right"></i>
-      </el-button>
+      <el-button plain :icon="ArrowRight"></el-button>
     </div>
     <div class="tags-close">
       <el-dropdown trigger="click">
-        <el-button :plain="true">
-          <i class="el-icon-close"></i>
-        </el-button>
+        <el-button plain :icon="Close"></el-button>
         <template #dropdown>
           <el-dropdown-item @click="closeAll">{{ $t('closeButton.closeAll') }}</el-dropdown-item>
           <el-dropdown-item @click="closeOther">{{ $t('closeButton.closeOther') }}</el-dropdown-item>
@@ -28,13 +22,17 @@
       <div class="tags-view" ref="tagsViewRef" :style="{left: tagsViewLeft + 'px'}">
         <el-tag
           :key="tag.fullPath"
+          size="large"
           v-for="tag in tagList"
           :closable = "tag.closable"
           :color="isActive(tag)"
           :disable-transitions="false"
           @click="openTagPage(tag)"
           @close="closeTagPage(tag)">
-          <i class="el-icon-star-on" v-if="isStar(tag)"></i> {{ getTagTitleName(tag.title) }}
+          <el-icon v-if="isStar(tag)" :size="10">
+            <star-filled />
+          </el-icon>
+          {{ getTagTitleName(tag.title) }}
         </el-tag>
       </div>
     </div>
@@ -48,9 +46,13 @@ import { useRoute, useRouter } from 'vue-router'
 import config from '@/config'
 import { useI18n } from 'vue-i18n'
 import { getTagTitleName } from '@/utils/helper'
+import { Close, ArrowLeft, ArrowRight, StarFilled } from "@element-plus/icons-vue"
 
 export default {
   name: 'TagsView',
+  components: {
+    StarFilled
+  },
   setup() {
     let tagsViewLeft = ref(0)
 
@@ -147,6 +149,9 @@ export default {
       closeRight,
       closeLeft,
       tagsScroll,
+      Close,
+      ArrowLeft,
+      ArrowRight,
       closeTagPage: (tag) => {
         store.dispatch('closeTagView', tag.fullPath)
       },

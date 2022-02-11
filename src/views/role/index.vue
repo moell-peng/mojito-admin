@@ -1,6 +1,6 @@
 <template>
   <el-card style="margin:10px">
-    <el-form :inline="false" :model="table.queryParams" size="small">
+    <el-form :inline="false" :model="table.queryParams">
       <el-row :gutter="40">
         <el-col :span="8">
           <el-form-item :label="$t('name')">
@@ -8,7 +8,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8" :offset="8" style="text-align:right">
-         <el-button type="primary" size="small" @click="requestData" icon="el-icon-search">{{ $t('search') }}</el-button>
+         <el-button type="primary" @click="requestData" icon="el-icon-search">{{ $t('search') }}</el-button>
         </el-col>
       </el-row>
     </el-form>
@@ -16,7 +16,7 @@
   <el-card style="margin:10px">
     <table-action :title="$t('meta.title.role')">
       <template #action>
-        <el-button type="primary" size="small" v-if="addPermission"  @click="showAddRoleDialog" icon="el-icon-plus">{{ $t('add') }}</el-button>
+        <el-button type="primary" v-if="addPermission"  @click="showAddRoleDialog" icon="el-icon-plus">{{ $t('add') }}</el-button>
       </template>
     </table-action>
     <el-table
@@ -53,16 +53,14 @@
           <el-button
                   v-if="updatePermission"
                   type="text"
-                  size="mini"
                   @click="showEditRoleDialog(scope.row)">{{ $t('edit') }}</el-button>
           <el-button
                   v-if="assignPermission"
                   @click="showAssignPermissionDrawer(scope.row)"
-                  type="text"
-                  size="mini">{{ $t('assignPermission') }}</el-button>
+                  type="text">{{ $t('assignPermission') }}</el-button>
           <el-popconfirm v-if="deletePermission" :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
             <template #reference>
-              <el-button size="mini" type="text">{{ $t('delete') }}</el-button>
+              <el-button type="text">{{ $t('delete') }}</el-button>
             </template>
           </el-popconfirm>
         </template>
@@ -77,7 +75,7 @@
     </el-pagination>
   </el-card>
   <el-dialog :title="dialogAction == 'add' ? $t('add') : $t('edit')" v-model="dialogFormVisible"  width="500px">
-    <el-form :model="form" :rules="rules" label-width="120px" size="small" ref="formRef">
+    <el-form :model="form" :rules="rules" label-width="120px" ref="formRef">
       <el-form-item :label="$t('name')" prop="name">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
@@ -89,9 +87,9 @@
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button size="small" @click="dialogFormVisible = false">{{ $t('cancel') }}</el-button>
-      <el-button size="small" type="primary" @click="handleAddRole" v-if="dialogAction == 'add'">{{ $t('confirm') }}</el-button>
-      <el-button size="small" type="primary" @click="handleEditRole" v-if="dialogAction == 'edit'">{{ $t('confirm') }}</el-button>
+      <el-button @click="dialogFormVisible = false">{{ $t('cancel') }}</el-button>
+      <el-button type="primary" @click="handleAddRole" v-if="dialogAction == 'add'">{{ $t('confirm') }}</el-button>
+      <el-button type="primary" @click="handleEditRole" v-if="dialogAction == 'edit'">{{ $t('confirm') }}</el-button>
     </template>
   </el-dialog>
   <role-assign-permission-drawer v-model="assignPermisionDrawer" :role-id="assignPermissionRole.id" :guard-name="assignPermissionRole.guardName"></role-assign-permission-drawer>

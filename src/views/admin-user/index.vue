@@ -1,6 +1,6 @@
 <template>
   <el-card style="margin:10px;">
-    <el-form :inline="false" :model="table.queryParams" size="small">
+    <el-form :inline="false" :model="table.queryParams">
       <el-row :gutter="40"> 
         <el-col :span="8">
           <el-form-item :label="$t('name')">
@@ -13,7 +13,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8" style="text-align:right">
-          <el-button type="primary" @click="requestData" size="small">{{ $t('search') }}</el-button>
+          <el-button type="primary" @click="requestData">{{ $t('search') }}</el-button>
         </el-col>
       </el-row>
     </el-form>
@@ -21,7 +21,7 @@
   <el-card style="margin:10px;">
     <table-action :title="$t('meta.title.adminUser')">
       <template #action>
-        <el-button type="primary" v-if="hasAddPermission" size="small"  @click="addDialogVisible = true">{{ $t('add') }}</el-button>
+        <el-button type="primary" v-if="hasAddPermission"  @click="addDialogVisible = true">{{ $t('add') }}</el-button>
       </template>
     </table-action>
     <el-table
@@ -64,17 +64,15 @@
         <template #default="scope">
           <el-button
                   v-if="hasEditPermission"
-                  size="mini"
                   type="text"
                   @click="handleEdit(scope.row)">{{ $t('edit') }}</el-button>
           <el-button
                   v-if="hasAssignRolePermission"
-                  size="mini"
                   type="text"
                   @click="handleAssignRole(scope.row)">{{ $t('assignRole') }}</el-button>
           <el-popconfirm v-if="hasDeletePermission" :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
             <template #reference>
-              <el-button size="mini" type="text">{{ $t('delete') }}</el-button>
+              <el-button type="text">{{ $t('delete') }}</el-button>
             </template>
           </el-popconfirm>
         </template>

@@ -1,6 +1,6 @@
 <template>
   <el-dialog :title="title" v-model="dialogVisible"  width="500px">
-    <el-form :model="form" :rules="rules" ref="formRef" label-width="100px"  size="small">
+    <el-form :model="form" :rules="rules" ref="formRef" label-width="100px" >
       <el-form-item :label="$t('name')" prop="name">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
@@ -18,9 +18,9 @@
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button @click="dialogVisible = false" size="small">{{ $t('cancel') }}</el-button>
-      <el-button type="primary" @click="handleAddAdminUser" v-if="action === 'add'" size="small">{{ $t('confirm') }}</el-button>
-      <el-button type="primary" @click="handleUpdateAdminUser" v-if="action === 'edit'" size="small">{{ $t('confirm') }}</el-button>
+      <el-button @click="dialogVisible = false">{{ $t('cancel') }}</el-button>
+      <el-button type="primary" @click="handleAddAdminUser" v-if="action === 'add'">{{ $t('confirm') }}</el-button>
+      <el-button type="primary" @click="handleUpdateAdminUser" v-if="action === 'edit'">{{ $t('confirm') }}</el-button>
     </template>
   </el-dialog>
 </template>

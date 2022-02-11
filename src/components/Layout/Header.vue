@@ -2,18 +2,23 @@
   <el-header>
     <el-row>
       <el-col :span="1" class="open-menu">
-        <i :class="isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold'" @click="menuOpenOrClose"></i>
+        <el-icon @click="menuOpenOrClose">
+          <expand v-if="isCollapse" />
+          <fold v-if="!isCollapse" />
+        </el-icon>
       </el-col>
       <el-col :span="15">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item v-for="bc in breadcrumb" :to="{ path: bc.path }" :key="bc.path"> {{ getTagTitleName(bc.meta.title) }}</el-breadcrumb-item>
         </el-breadcrumb>
       </el-col>
-      <el-col :span="8" style="text-align:right">
-        <el-dropdown style="margin-right:30px;" v-if="switchLanguage">
+      <el-col :span="8" style="text-align:right;">
+        <el-dropdown style="margin-right:30px;line-height:60px;" v-if="switchLanguage">
           <span class="el-dropdown-link">
             {{ $t("language") }}
-            <i class="el-icon-arrow-down el-icon--right"></i>
+            <el-icon class="el-icon--right">
+              <arrow-down />
+            </el-icon>
           </span>
           <template #dropdown>
             <el-dropdown-menu>
@@ -22,10 +27,14 @@
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-        <el-dropdown>
+        <el-dropdown style="line-height:60px;">
           <span class="el-dropdown-link">
-            <i class="el-icon-user-solid"></i>
-            <i class="el-icon-arrow-down el-icon--right"></i>
+            <el-icon>
+              <avatar />
+            </el-icon>
+            <el-icon class="el-icon--right">
+              <arrow-down />
+            </el-icon>
           </span>
           <template #dropdown>
             <el-dropdown-menu>
@@ -50,9 +59,13 @@ import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { setLocale } from '@/utils/localforage'
 import { getTagTitleName } from '@/utils/helper'
+import { Fold, Expand, Avatar, ArrowDown } from "@element-plus/icons-vue"
 
 export default {
   name: 'MojitoHeader',
+  components: {
+    Fold, Expand, Avatar, ArrowDown
+  },
   props: {
     isCollapse: Boolean
   },

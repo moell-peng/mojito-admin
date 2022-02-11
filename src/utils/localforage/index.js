@@ -40,7 +40,6 @@ export const setLocale = (lang) => {
 }
 
 export const getLocale = () => {
-  console.log(getLocaleKey())
   return localforage.getItem(getLocaleKey())
 }
 
