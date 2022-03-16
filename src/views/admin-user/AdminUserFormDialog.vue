@@ -7,14 +7,11 @@
       <el-form-item :label="$t('username')" prop="username" v-if="action ==='add'">
         <el-input v-model="form.username"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('password')" prop="password" v-if="action ==='add'">
+      <el-form-item :label="$t('password')" prop="password">
         <el-input  type="password" v-model="form.password"></el-input>
       </el-form-item>
       <el-form-item :label="$t('status')">
         <el-switch v-model="form.status"></el-switch>
-      </el-form-item>
-      <el-form-item :label="$t('remark')" prop="remark">
-        <el-input  type="textarea" v-model="form.remark"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -51,8 +48,7 @@ export default defineComponent({
     const form = ref({
       name: null,
       username: null,
-      pasword: null,
-      remark: null,
+      password: null,
       status: true,
     })
 
@@ -87,7 +83,6 @@ export default defineComponent({
     watch(() => props.row, (row) => {
       id.value = row.id
       form.value.name = row.name
-      form.value.remark = row.remark
       form.value.status = row.status
     })
 
@@ -113,10 +108,8 @@ export default defineComponent({
           notice.editSuccess()
           dialogVisible.value = false
           props.row.name = form.value.name
-          props.row.remark = form.value.remark
           props.row.status = form.value.status
-          formRef.value.resetFields()
-          id.value = null
+          form.value.password = null
         }) 
       })
     }

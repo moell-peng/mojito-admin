@@ -45,10 +45,6 @@
         </template>
       </el-table-column>
       <el-table-column
-              prop="remark"
-              :label="$t('remark')">
-      </el-table-column>
-      <el-table-column
               prop="created_at"
               :label="$t('createdAt')">
       </el-table-column>

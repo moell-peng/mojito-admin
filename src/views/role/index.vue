@@ -8,7 +8,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8" :offset="8" style="text-align:right">
-         <el-button type="primary" @click="requestData" icon="el-icon-search">{{ $t('search') }}</el-button>
+         <el-button type="primary" @click="requestData" :icon="Search">{{ $t('search') }}</el-button>
         </el-col>
       </el-row>
     </el-form>
@@ -16,7 +16,7 @@
   <el-card style="margin:10px">
     <table-action :title="$t('meta.title.role')">
       <template #action>
-        <el-button type="primary" v-if="addPermission"  @click="showAddRoleDialog" icon="el-icon-plus">{{ $t('add') }}</el-button>
+        <el-button type="primary" v-if="addPermission"  @click="showAddRoleDialog" :icon="Plus">{{ $t('add') }}</el-button>
       </template>
     </table-action>
     <el-table
@@ -104,6 +104,7 @@ import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import notice from '@/utils/notice'
 import RoleAssignPermissionDrawer from './RoleAssignPermissionDrawer.vue'
+import { Plus, Search} from '@element-plus/icons-vue'
 
 export default {
   name: 'roleIndex',
@@ -233,6 +234,8 @@ export default {
           { min: 1, max: 255 }
         ]
       },
+      Plus,
+      Search,
     }
   },
 }

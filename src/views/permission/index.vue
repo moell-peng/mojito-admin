@@ -18,7 +18,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6" style="text-align:right">
-         <el-button type="primary" @click="requestData">{{ $t('search') }}</el-button>
+         <el-button type="primary" @click="requestData" :icon="Search">{{ $t('search') }}</el-button>
         </el-col>
       </el-row>
     </el-form>
@@ -27,7 +27,7 @@
     <table-action :title="$t('meta.title.permission')">
       <template #action>
         <el-button type="primary" v-if="hasPermissionGroup"  @click="permissionGroupdrawer = true">{{ $t('meta.title.permissionGroup') }}</el-button>
-        <el-button type="primary" v-if="hasAddPermission" @click="handleAdd" icon="el-icon-plus">{{ $t('add') }}</el-button>
+        <el-button type="primary" v-if="hasAddPermission" @click="handleAdd" :icon="Plus">{{ $t('add') }}</el-button>
       </template>
     </table-action>
     <el-table
@@ -97,6 +97,7 @@ import { useStore } from 'vuex'
 import PermissionGroupDrawer from './PermissionGroupDrawer.vue'
 import { tableDefaultData, tableDataFormat } from '@/utils/table'
 import notice from '@/utils/notice'
+import { Plus, Search } from '@element-plus/icons-vue'
 
 export default {
   name: 'permissionIndex',
@@ -158,6 +159,8 @@ export default {
       handleAdd,
       formAction,
       updateRow,
+      Plus,
+      Search,
       permissionGroupdrawer,
       hasAddPermission: computed(() => store.getters.hasPermission("permission.store")),
       hasUpdatePermission: computed(() => store.getters.hasPermission("permission.update")),
