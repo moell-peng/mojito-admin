@@ -49,7 +49,7 @@
               align="center"
               :label="$t('icon')">
         <template #default="scope">
-          <i :class="scope.row.icon"></i>
+          <el-icon v-if="scope.row.icon"><component  :is="icon(scope.row.icon)" /></el-icon>
         </template>
       </el-table-column>
       <el-table-column
@@ -138,6 +138,9 @@ export default {
       hasAddPermission: computed(() => store.getters.hasPermission("menu.store")),
       hasUpdatePermission: computed(() => store.getters.hasPermission("menu.update")),
       hasDeletePermission: computed(() => store.getters.hasPermission("menu.destroy")),
+      icon: computed(() => (name) => {
+        return name
+      }),
     }
   },
 }

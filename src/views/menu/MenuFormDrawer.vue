@@ -24,7 +24,7 @@
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button @click="dialogformVisible = false">{{ $t('cancel') }}</el-button>
+      <el-button @click="drawer = false">{{ $t('cancel') }}</el-button>
       <el-button type="primary" @click="handleAdd" v-if="actionType === 'add'">{{ $t('confirm') }}</el-button>
       <el-button type="primary" @click="handleEdit" v-if="actionType === 'edit'">{{ $t('confirm') }}</el-button>
     </template>
@@ -71,7 +71,7 @@ export default defineComponent({
       guard_name: null,
       parent_id: null,
       icon: null,
-      sequence: null,
+      sequence: 0,
     }
     const form = ref(defualtForm)
     const formRef = ref(null)

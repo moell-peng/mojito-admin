@@ -64,7 +64,7 @@ export default defineComponent({
       guard_name: null,
       pg_id: null,
       icon: null,
-      sequence: null,
+      sequence: 0,
       description: null,
     }
     const form = ref(defaultForm)
