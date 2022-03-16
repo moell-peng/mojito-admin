@@ -17,7 +17,11 @@
         <el-input v-model="form.permission_name"></el-input>
       </el-form-item>
       <el-form-item :label="$t('icon')" prop="icon">
-        <el-input v-model="form.icon"></el-input>
+        <el-input v-model="form.icon">
+          <template #append>
+            <select-icon-popover v-model:selectIconName="form.icon"></select-icon-popover>
+          </template>
+        </el-input>
       </el-form-item>
       <el-form-item :label="$t('sequence')" prop="sequence">
         <el-input v-model.number="form.sequence"></el-input>
@@ -38,6 +42,8 @@ import MenuCascader from '@/components/Cascader/MenuCascader.vue'
 import { defineComponent, ref, watch } from 'vue'
 import { addMenu, editMenu } from '@/api/menu'
 import notice from '@/utils/notice'
+import { More } from '@element-plus/icons-vue'
+import SelectIconPopover from './SelectIconPopover.vue'
 
 export default defineComponent({
   components: { 
@@ -45,6 +51,7 @@ export default defineComponent({
     GuardSelect,
     PermissionGroupSelect,
     MenuCascader,
+    SelectIconPopover,
   },
   name: 'PermissionFormDrawer',
   props: {
@@ -73,6 +80,7 @@ export default defineComponent({
       icon: null,
       sequence: 0,
     }
+
     const form = ref(defualtForm)
     const formRef = ref(null)
 
@@ -143,6 +151,7 @@ export default defineComponent({
       handleAdd,
       handleEdit,
       actionType,
+      More,
       rules: {
         name: [
           { required: true },
