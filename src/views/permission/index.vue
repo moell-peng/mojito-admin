@@ -85,7 +85,7 @@
   <permission-group-drawer v-model="permissionGroupdrawer"></permission-group-drawer>
 </template>
 
-<script>
+<script setup>
 import { deletePermission, getPermissionList } from '@/api/permission'
 import GuardSelect from '@/components/Select/GuardSelect.vue'
 import PermissionGroupSelect from "@/components/Select/PermissionGroupSelect.vue"
@@ -99,74 +99,48 @@ import { tableDefaultData, tableDataFormat } from '@/utils/table'
 import notice from '@/utils/notice'
 import { Plus, Search } from '@element-plus/icons-vue'
 
-export default {
-  name: 'permissionIndex',
-  components: {
-    PermissionGroupSelect,
-    GuardSelect,
-    CustomScrollDrawer,
-    TableAction,
-    PermissionFormDrawer,
-    PermissionGroupDrawer,
-  },
-  setup() {
-    const drawer = ref(false)
-    const permissionGroupdrawer = ref(false)
-    const store = useStore()
-    const table = tableDefaultData()
+const drawer = ref(false)
+const permissionGroupdrawer = ref(false)
+const store = useStore()
+const table = tableDefaultData()
 
-    const requestData = () => {
-      table.loading = true
-      getPermissionList(table.getQueryParams()).then( response => {
-        tableDataFormat(response, table)
-      })
-    }
-
-    requestData()
-
-    const formAction = ref('add')
-    const handleAdd = () => {
-      formAction.value = 'add'
-      drawer.value = true
-    }
-
-    const updateRow = ref({})
-    const handleEdit = (row) => {
-      updateRow.value = row
-      drawer.value = true
-      formAction.value = 'edit'
-    }
-
-    const handleDelete = (index, row) => {
-      deletePermission(row.id).then(() => {
-        notice.deleteSuccess()
-        table.data.splice(index, 1)
-      })
-    }
-
-    watch(drawer, d => {
-      if (!d) {
-        updateRow.value = {}
-      }
-    })
-
-    return {
-      drawer,
-      table,
-      requestData,
-      handleEdit,
-      handleDelete,
-      handleAdd,
-      formAction,
-      updateRow,
-      Plus,
-      Search,
-      permissionGroupdrawer,
-      hasAddPermission: computed(() => store.getters.hasPermission("permission.store")),
-      hasUpdatePermission: computed(() => store.getters.hasPermission("permission.update")),
-      hasDeletePermission: computed(() => store.getters.hasPermission("permission.destroy")),
-      hasPermissionGroup: computed(() => store.getters.hasPermission("permission-group.index")),
-    }
-  },
+const requestData = () => {
+  table.loading = true
+  getPermissionList(table.getQueryParams()).then( response => {
+    tableDataFormat(response, table)
+  })
 }
+
+requestData()
+
+const formAction = ref('add')
+const handleAdd = () => {
+  formAction.value = 'add'
+  drawer.value = true
+}
+
+const updateRow = ref({})
+const handleEdit = (row) => {
+  updateRow.value = row
+  drawer.value = true
+  formAction.value = 'edit'
+}
+
+const handleDelete = (index, row) => {
+  deletePermission(row.id).then(() => {
+    notice.deleteSuccess()
+    table.data.splice(index, 1)
+  })
+}
+
+watch(drawer, d => {
+  if (!d) {
+    updateRow.value = {}
+  }
+})
+
+const hasAddPermission = computed(() => store.getters.hasPermission("permission.store"))
+const hasUpdatePermission = computed(() => store.getters.hasPermission("permission.update"))
+const hasDeletePermission = computed(() => store.getters.hasPermission("permission.destroy"))
+const hasPermissionGroup = computed(() => store.getters.hasPermission("permission-group.index"))
 </script>

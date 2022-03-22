@@ -27,34 +27,24 @@
   </el-aside>
 </template>
 
-<script>
+<script setup>
 import NavItem from './NavItem.vue'
 import config from '@/config'
 import { myMenu } from '@/api/menu'
 import { ref } from 'vue'
 
-export default {
-  name: 'NavBar',
-  components: {
-    NavItem
-  },
-  props: {
-    isCollapse: Boolean
-  },
-  setup() {
-    let menuItems = ref([])
+const props = defineProps({
+  isCollapse: Boolean
+})
 
-    myMenu().then(response => {
-      menuItems.value = response.data.data
-    })
+let menuItems = ref([])
 
-    return {
-      menuItems,
-      fullName: config.fullName,
-      abbrName: config.abbrName,
-    }
-  },
-}
+myMenu().then(response => {
+  menuItems.value = response.data.data
+})
+
+const fullName = config.fullName
+const abbrName = config.abbrName
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>

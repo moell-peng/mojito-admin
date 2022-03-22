@@ -21,79 +21,66 @@
     </el-form>
   </el-card>
 </template>
-<script>
+<script setup>
 import { ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import config from '@/config'
 import { changePassword } from '@/api/changePassword'
 
-export default {
-  name: "changePasswordPage",
-  setup() {
-    const store = useStore()
-    const router = useRouter()
-    const form = ref({
-      old_password: null,
-      password: null,
-      password_confirmation: null
+const store = useStore()
+const router = useRouter()
+const form = ref({
+  old_password: null,
+  password: null,
+  password_confirmation: null
+})
+
+let confirmPassword = (rule, value, callback) => {
+  if (value === '') {
+    callback(new Error('Please enter your password again'))
+  } else if (value !== form.value.password) {
+    callback(new Error('Inconsistent password entered twice'))
+  } else {
+    callback()
+  }
+}
+
+const rules = {
+  old_password: [
+    { required: true },
+    { min: 6, max: 32 }
+  ],
+  password: [
+    { required: true },
+    { min: 8, max: 32 }
+  ],
+  password_confirmation: [
+    { required: true },
+    { validator: confirmPassword },
+    { min: 8, max: 32 }
+  ]
+}
+
+const formRef= ref(null)
+
+const submitForm = () => {
+  formRef.value.validate((valid) => {
+    if (!valid) {
+      return false
+    }
+
+    changePassword(form.value).then(() => {
+      resetForm()
+      store.dispatch("logoutHandle").then(router.push({
+        name: config.loginRouteName
+      }))
     })
+  })
+}
 
-    let confirmPassword = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('Please enter your password again'))
-      } else if (value !== form.value.password) {
-        callback(new Error('Inconsistent password entered twice'))
-      } else {
-        callback()
-      }
-    }
-
-    const rules = {
-      old_password: [
-        { required: true },
-        { min: 6, max: 32 }
-      ],
-      password: [
-        { required: true },
-        { min: 8, max: 32 }
-      ],
-      password_confirmation: [
-        { required: true },
-        { validator: confirmPassword },
-        { min: 8, max: 32 }
-      ]
-    }
-
-    const formRef= ref(null)
-
-    const submitForm = () => {
-      formRef.value.validate((valid) => {
-        if (!valid) {
-          return false
-        }
-
-        changePassword(form.value).then(() => {
-          resetForm()
-          store.dispatch("logoutHandle").then(router.push({
-            name: config.loginRouteName
-          }))
-        })
-      })
-    }
-
-    const resetForm = () => {
-        formRef.value.resetFields()
-    }
-
-    return {
-      rules,
-      form,
-      submitForm,
-      resetForm,
-      formRef,
-    }
-  },
+const resetForm = () => {
+    formRef.value.resetFields()
 }
 </script>
 <style lang="scss" scoped>

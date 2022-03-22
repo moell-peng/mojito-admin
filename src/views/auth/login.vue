@@ -15,61 +15,47 @@
     </el-form>
   </div>
 </template>
-<script>
+<script setup>
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import config from '@/config'
 
-export default {
-  name: "loginPage",
-  setup() {
-    const { t } = useI18n()
-    const store = useStore()
-    const router = useRouter()
+const { t } = useI18n()
+const store = useStore()
+const router = useRouter()
 
-    const rules = {
-      username: [
-        { required: true, trigger: 'blur', message: t('rules.login.username.required') }
-      ],
-      password: [
-        { required: true, trigger: 'blur', message: t('rules.login.password.required') }
-      ]
-    }
+const rules = {
+  username: [
+    { required: true, trigger: 'blur', message: t('rules.login.username.required') }
+  ],
+  password: [
+    { required: true, trigger: 'blur', message: t('rules.login.password.required') }
+  ]
+}
 
-    const form = ref({
-      username: null,
-      password: null,
-    })
+const form = ref({
+  username: null,
+  password: null,
+})
 
-    const loginForm = ref(null)
+const loginForm = ref(null)
 
-    const submitForm = () => {
-      loginForm.value.validate((valid) => {
-        if (valid) {
-          store.dispatch("loginHandle", form.value).then(() => {
-            router.push({
-              name: config.homeRouteName
-            })
-          })
-        }
+const submitForm = () => {
+  loginForm.value.validate((valid) => {
+    if (valid) {
+      store.dispatch("loginHandle", form.value).then(() => {
+        router.push({
+          name: config.homeRouteName
+        })
       })
     }
+  })
+}
 
-    const resetForm = () => {
-        loginForm.value.resetFields()
-    }
-
-    return {
-      rules,
-      form,
-      submitForm,
-      resetForm,
-      loginForm,
-      title: config.fullName,
-    }
-  },
+const resetForm = () => {
+    loginForm.value.resetFields()
 }
 </script>
 <style scoped>

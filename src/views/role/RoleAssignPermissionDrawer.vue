@@ -26,7 +26,7 @@
     </template>
   </custom-scroll-drawer>
 </template>
-<script>
+<script setup>
 import CustomScrollDrawer from '@/components/Drawer/CustomScrollDrawer.vue'
 import { guardNameForPermissions } from '@/api/permissionGroup'
 import { rolePermission, roleAssignPermission } from '@/api/role'
@@ -34,107 +34,91 @@ import { defineComponent, ref, watch } from 'vue'
 import { ElNotification } from 'element-plus'
 import { useI18n } from 'vue-i18n'
 
-export default defineComponent({
-  components: { 
-    CustomScrollDrawer,
+const props = defineProps({
+  modelValue: false,
+  roleId: {
+    type: Number,
   },
-  name: 'RoleAssignPermissionDrawer',
-  props: {
-    modelValue: false,
-    roleId: {
-      type: Number,
-    },
-    guardName: {
-      type: String,
-      default: 'admin',
-    }
-  },
-  setup(props, { emit }) {
-    const i18n = useI18n()
-    const drawer = ref(props.modelValue)
-    
-    watch(() => props.modelValue, (v) => {
-      drawer.value = v
+  guardName: {
+    type: String,
+    default: 'admin',
+  }
+})
+
+const emit = defineEmits(["update:modelValue"])
+
+const i18n = useI18n()
+const drawer = ref(props.modelValue)
+
+watch(() => props.modelValue, (v) => {
+  drawer.value = v
+})
+
+watch(drawer, (d) => {
+  emit("update:modelValue", d)
+})
+
+const loading = ref(false)
+
+const rolePermissions = ref([])
+const guardNameByPermissions = ref([])
+const groupPermissions = ref({})
+const radio = ref({})
+
+const assignPermission = () => {
+  roleAssignPermission(props.roleId, rolePermissions.value).then( () => {
+    ElNotification.success({
+      message: i18n.t('assignPermissionSuccess')
     })
+  })
+}
 
-    watch(drawer, (d) => {
-      emit("update:modelValue", d)
-    })
+const change = (groupId) => {
+  groupPermissions.value[groupId].forEach( permission => {
+    let index = rolePermissions.value.indexOf(permission)
 
-    const loading = ref(false)
-
-    const rolePermissions = ref([])
-    const guardNameByPermissions = ref([])
-    const groupPermissions = ref({})
-    const radio = ref({})
-    
-    const assignPermission = () => {
-      roleAssignPermission(props.roleId, rolePermissions.value).then( () => {
-        ElNotification.success({
-          message: i18n.t('assignPermissionSuccess')
-        })
-      })
+    if (!radio.value[groupId] && index >= 0) {
+      rolePermissions.value.splice(index, 1)
+    } else if (radio.value[groupId] && index === -1) {
+      rolePermissions.value.push(permission)
     }
+  })
+}
 
-    const change = (groupId) => {
-      groupPermissions.value[groupId].forEach( permission => {
-        let index = rolePermissions.value.indexOf(permission)
+const loadData = () => {
+  loading.value = true
+  rolePermissions.value = []
+  guardNameByPermissions.value = []
+  groupPermissions.value = {}
+  radio.value = {}
 
-        if (!radio.value[groupId] && index >= 0) {
-          rolePermissions.value.splice(index, 1)
-        } else if (radio.value[groupId] && index === -1) {
-          rolePermissions.value.push(permission)
-        }
-      })
-    }
+  let requestPermissionGroups = guardNameForPermissions(props.guardName)
+  let requestRolePermissions = rolePermission(props.roleId)
 
-    const loadData = () => {
-      loading.value = true
-      rolePermissions.value = []
-      guardNameByPermissions.value = []
-      groupPermissions.value = {}
-      radio.value = {}
+  Promise.all([requestPermissionGroups, requestRolePermissions]).then( result => {
+    guardNameByPermissions.value  = result[0].data.data
 
-      let requestPermissionGroups = guardNameForPermissions(props.guardName)
-      let requestRolePermissions = rolePermission(props.roleId)
-
-      Promise.all([requestPermissionGroups, requestRolePermissions]).then( result => {
-        guardNameByPermissions.value  = result[0].data.data
-
-        result[0].data.data.forEach(item => {
-          if (!groupPermissions.value.hasOwnProperty(item.id)) {
-            groupPermissions.value[item.id] = []
-          }
-          item.permission.forEach (permission => {
-            groupPermissions.value[item.id].push(permission.name)
-          })
-        })
-
-        result[1].data.data.forEach(item => {
-          rolePermissions.value.push(item.name)
-        })
-      })
-
-      loading.value = false
-    }
-
-    watch(() => props.roleId, (roleId) => {
-      if (roleId) {
-        loadData()
+    result[0].data.data.forEach(item => {
+      if (!groupPermissions.value.hasOwnProperty(item.id)) {
+        groupPermissions.value[item.id] = []
       }
+      item.permission.forEach (permission => {
+        groupPermissions.value[item.id].push(permission.name)
+      })
     })
 
-    return {
-      drawer,
-      assignPermission,
-      rolePermissions,
-      guardNameByPermissions,
-      groupPermissions,
-      radio,
-      change,
-      loading,
-    }
-  },
+    result[1].data.data.forEach(item => {
+      rolePermissions.value.push(item.name)
+    })
+  })
+
+  loading.value = false
+}
+
+watch(() => props.roleId, (roleId) => {
+  if (roleId) {
+    loadData()
+  }
 })
 </script>
 <style lang="scss" scoped>

@@ -4,7 +4,7 @@
   </el-config-provider>
 </template>
 
-<script>
+<script setup>
 import { computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
@@ -15,39 +15,31 @@ import en from 'element-plus/lib/locale/lang/en'
 import { getLocale } from './utils/localforage'
 import { useI18n } from 'vue-i18n'
 
-export default {
-  name: 'App',
-  setup() {
-    const route = useRoute()
-    const store = useStore()
-    onMounted(() => {
-      store.commit('SET_BREADCRUMB', route.matched)
-    })
+const route = useRoute()
+const store = useStore()
+onMounted(() => {
+  store.commit('SET_BREADCRUMB', route.matched)
+})
 
-    const i18n = useI18n()
-    getLocale().then(lang => {
-      if (lang) {
-        store.commit("SET_LOCALE", lang)
-        i18n.locale.value = lang
-      }
-    })
-
-    watch(route, () => {
-      store.commit('SET_BREADCRUMB', route.matched)
-      if (route.name !== config.loginRouteName) {
-        store.dispatch("openTagView", routeFormatTag(route))
-      }
-    })
-
-    const locale = computed(() => {
-      return store.getters.locale === 'zh-cn' ? zhCn : en
-    })
-
-    return {
-      locale,
-    }
+const i18n = useI18n()
+getLocale().then(lang => {
+  if (lang) {
+    store.commit("SET_LOCALE", lang)
+    i18n.locale.value = lang
   }
-}
+})
+
+watch(route, () => {
+  store.commit('SET_BREADCRUMB', route.matched)
+  if (route.name !== config.loginRouteName) {
+    store.dispatch("openTagView", routeFormatTag(route))
+  }
+})
+
+const locale = computed(() => {
+  return store.getters.locale === 'zh-cn' ? zhCn : en
+})
+
 </script>
 
 <style>

@@ -72,7 +72,7 @@
   <menu-form-drawer :row="updateRow" v-model="showFormDrawer" :action="formAction"></menu-form-drawer>
 </template>
 
-<script>
+<script setup>
 import GuardSelect from '@/components/Select/GuardSelect.vue'
 import { getMenuList, deleteMenu } from '@/api/menu'
 import MenuCascader from '@/components/Cascader/MenuCascader.vue'
@@ -83,67 +83,45 @@ import { useStore } from 'vuex'
 import { tableDefaultData } from '@/utils/table'
 import notice from '@/utils/notice'
 
-export default {
-  name: 'adminUserIndex',
-  components: {
-    GuardSelect,
-    MenuCascader,
-    TableAction,
-    MenuFormDrawer,
-  },
-  setup() {
-    const showFormDrawer = ref(false)
-    const store = useStore()
-    const table = tableDefaultData()
+const showFormDrawer = ref(false)
+const store = useStore()
+const table = tableDefaultData()
 
-    const requestData = () => {
-      table.loading = true
-      getMenuList(table.queryParams).then( response => {
-        table.data = response.data.data
-        table.loading = false
-      })
-    }
-
-    requestData()
-
-    const handleDelete = (index, row) => {
-      deleteMenu(row.id).then( () => {
-        notice.deleteSuccess()
-        table.data.splice(index, 1)
-      })
-    }
-
-    const formAction = ref('add')
-    const updateRow = ref(null)
-    const handleEdit = (row) => {
-      showFormDrawer.value = true
-      formAction.value = 'edit'
-      updateRow.value = row
-    }
-
-    const handleAdd = () => {
-      showFormDrawer.value = true
-      formAction.value = 'add'
-    }
-
-    return {
-      showFormDrawer,
-      table,
-      requestData,
-      handleDelete,
-      updateRow,
-      handleEdit,
-      handleAdd,
-      formAction,
-      hasAddPermission: computed(() => store.getters.hasPermission("menu.store")),
-      hasUpdatePermission: computed(() => store.getters.hasPermission("menu.update")),
-      hasDeletePermission: computed(() => store.getters.hasPermission("menu.destroy")),
-      icon: computed(() => (name) => {
-        return name
-      }),
-    }
-  },
+const requestData = () => {
+  table.loading = true
+  getMenuList(table.queryParams).then( response => {
+    table.data = response.data.data
+    table.loading = false
+  })
 }
+
+requestData()
+
+const handleDelete = (index, row) => {
+  deleteMenu(row.id).then( () => {
+    notice.deleteSuccess()
+    table.data.splice(index, 1)
+  })
+}
+
+const formAction = ref('add')
+const updateRow = ref(null)
+const handleEdit = (row) => {
+  showFormDrawer.value = true
+  formAction.value = 'edit'
+  updateRow.value = row
+}
+
+const handleAdd = () => {
+  showFormDrawer.value = true
+  formAction.value = 'add'
+}
+
+const hasAddPermission = computed(() => store.getters.hasPermission("menu.store"))
+const hasUpdatePermission = computed(() => store.getters.hasPermission("menu.update"))
+const hasDeletePermission = computed(() => store.getters.hasPermission("menu.destroy"))
+const icon = computed(() => (name) => name)
+
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>

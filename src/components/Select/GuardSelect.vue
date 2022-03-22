@@ -3,32 +3,27 @@
     <el-option v-for="item in items" :label="item.label" :value="item.value" :key="item.label"></el-option>
   </el-select>
 </template>
-<script>
+<script setup>
 import config from '@/config'
 import { watch, ref } from 'vue'
 
-export default {
-  name: 'GuardSelect',
-  props: {
-    modelValue: {
-      type: String,
-    }
-  },
-  setup(props, { emit }) {
-    const guard = ref(props.modelValue)
+const props = defineProps({
+  modelValue: {
+    type: String,
+  }
+})
 
-    watch(() => props.modelValue, (v) => {
-      guard.value = v
-    })
+const emit = defineEmits(['update:modelValue'])
 
-    watch(guard, (v) => {
-      emit("update:modelValue", v)
-    })
+const guard = ref(props.modelValue)
 
-    return {
-      guard,
-      items: config.guardNames,
-    }
-  },
-}
+watch(() => props.modelValue, (v) => {
+  guard.value = v
+})
+
+watch(guard, (v) => {
+  emit("update:modelValue", v)
+})
+
+const items = config.guardNames
 </script>

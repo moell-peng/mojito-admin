@@ -5,21 +5,13 @@
     </template>
   </el-result>
 </template>
-<script>
+<script setup>
 import { useRouter } from 'vue-router'
-export default {
-  name: "PageNotFound",
-  setup() {
-    const router = useRouter()
 
-    const back = () => {
-      router.back()
-    }
+const router = useRouter()
 
-    return {
-      back,
-    }
-  }
+const back = () => {
+  router.back()
 }
 </script>
 <style lang="scss" scope>

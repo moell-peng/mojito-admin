@@ -13,81 +13,73 @@
     </template>
   </el-dialog>
 </template>
-<script>
+<script setup>
 import { getUserRoles, assginRoles  } from '@/api/adminUser'
 import { guardNameRoles  } from '@/api/role'
 import { ref, watch } from 'vue'
 import { ElNotification } from 'element-plus'
 import { useI18n } from 'vue-i18n'
-export default {
-  name: 'UserAssignRole',
-  props: {
-    userId: {
-      type: Number,
-    },
-    modelValue: {
-      type: Boolean,
-      default: false,
-    },
-    guardName: {
-      type: String,
-    }
+
+const props = defineProps({
+  userId: {
+    type: Number,
   },
-  setup(props, { emit }) {
-    const roles = ref([])
-    const userRoles = ref([])
-    const visible = ref(props.modelValue)
-    const i18n = useI18n()
+  modelValue: {
+    type: Boolean,
+    default: false,
+  },
+  guardName: {
+    type: String,
+  }
+})
 
-    watch(() => props.modelValue, (d) => {
-      visible.value = d
-      roles.value = []
-      userRoles.value = []
+const emit = defineEmits(['update:modelValue'])
 
-      if (d) {
-        let guardRolesRequest = guardNameRoles(props.guardName)
-        let userRolesRequest = getUserRoles(props.userId, props.guardName)
+const roles = ref([])
+const userRoles = ref([])
+const visible = ref(props.modelValue)
+const i18n = useI18n()
 
-        Promise.all([guardRolesRequest, userRolesRequest]).then( result => {
-          let roleItems = []
-          result[0].data.data.forEach( role => {
-            roleItems.push(role.name)
-          })
+watch(() => props.modelValue, (d) => {
+  visible.value = d
+  roles.value = []
+  userRoles.value = []
 
-          let userRoleItems = []
-          result[1].data.data.forEach( role => {
-            userRoleItems.push(role.name)
-          })
+  if (d) {
+    let guardRolesRequest = guardNameRoles(props.guardName)
+    let userRolesRequest = getUserRoles(props.userId, props.guardName)
 
-          roles.value = roleItems
-          userRoles.value = userRoleItems
-
-        }).catch(() => {
-          visible.value = false
-        })
-      }
-    })
-
-    watch(visible, (v) => {
-      emit("update:modelValue", v)
-    })
-
-    const assignRole = () => {
-      assginRoles(props.userId, props.guardName, userRoles.value).then( () => {
-        visible.value = false
-        ElNotification.success({
-          message: i18n.t('assignRoleSuccess')
-        })
+    Promise.all([guardRolesRequest, userRolesRequest]).then( result => {
+      let roleItems = []
+      result[0].data.data.forEach( role => {
+        roleItems.push(role.name)
       })
-    }
 
-    return {
-      roles,
-      userRoles,
-      visible,
-      assignRole,
-    }
-  },
+      let userRoleItems = []
+      result[1].data.data.forEach( role => {
+        userRoleItems.push(role.name)
+      })
+
+      roles.value = roleItems
+      userRoles.value = userRoleItems
+
+    }).catch(() => {
+      visible.value = false
+    })
+  }
+})
+
+watch(visible, (v) => {
+  emit("update:modelValue", v)
+})
+
+const assignRole = () => {
+  assginRoles(props.userId, props.guardName, userRoles.value).then( () => {
+    visible.value = false
+    ElNotification.success({
+      message: i18n.t('assignRoleSuccess')
+    })
+  })
 }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>

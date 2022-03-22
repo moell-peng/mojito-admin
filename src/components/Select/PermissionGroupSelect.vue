@@ -3,37 +3,30 @@
     <el-option v-for="group in groups" :label="group.name" :value="group.id" :key="group.id"></el-option>
   </el-select>
 </template>
-<script>
+<script setup>
 import { getPermissionGroupAll } from '@/api/permissionGroup'
 import { ref, watch } from 'vue'
 
-export default {
-  name: 'PermissionGroupSelect',
-  props: {
-    modelValue: {
-      type: Number
-    }
-  },
-  setup(props, { emit }) {
-    const groupId = ref(props.modelValue)
-    const groups = ref([])
+const props = defineProps({
+  modelValue: {
+    type: Number
+  }
+})
 
-    getPermissionGroupAll().then( response  => {
-      groups.value = response.data.data
-    })
+const emit = defineEmits(['update:modelValue'])
 
-    watch(() => props.modelValue, (v) => {
-      groupId.value = v
-    })
+const groupId = ref(props.modelValue)
+const groups = ref([])
 
-    watch(groupId, (v) => {
-      emit("update:modelValue", v)
-    })
+getPermissionGroupAll().then( response  => {
+  groups.value = response.data.data
+})
 
-    return {
-      groupId,
-      groups,
-    }
-  },
-}
+watch(() => props.modelValue, (v) => {
+  groupId.value = v
+})
+
+watch(groupId, (v) => {
+  emit("update:modelValue", v)
+})
 </script>

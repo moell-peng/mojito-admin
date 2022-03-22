@@ -21,109 +21,99 @@
     </template>
   </el-dialog>
 </template>
-<script>
+<script setup>
 import { addAdminUser, editAdminUser } from '@/api/adminUser'
 import notice from '@/utils/notice'
-import { defineComponent, ref, watch } from 'vue'
-export default defineComponent({
-  name: "AdminUserFormDialog",
-  props: {
-    modelValue: {
-      type: Boolean,
-      default: false,
-    },
-    title: {
-      type: String
-    },
-    action: {
-      type: String,
-    },
-    row: {
-      type: Object,
-    }
+import { ref, watch } from 'vue'
+
+const props = defineProps({
+  modelValue: {
+    type: Boolean,
+    default: false,
   },
-  setup(props, { emit }) {
-    const formRef = ref(null)
-
-    const form = ref({
-      name: null,
-      username: null,
-      password: null,
-      status: true,
-    })
-
-    let rules = {
-      name: [
-        { required: true },
-        { min: 3, max: 255 }
-      ],
-    }
-    if (props.action === 'add') {
-      rules = {...rules, email: [
-        { required: true},
-        { min: 5, max: 18 }
-      ],
-      password: [
-        { required: true },
-        { min: 8, max: 32 }
-      ]}
-    }
-
-    const dialogVisible = ref(false)
-
-    watch(() => props.modelValue, (v) => {
-      dialogVisible.value = v
-    })
-
-    watch(dialogVisible, (v) => {
-      emit("update:modelValue", v)
-    })
-
-    const id = ref(null)
-    watch(() => props.row, (row) => {
-      id.value = row.id
-      form.value.name = row.name
-      form.value.status = row.status
-    })
-
-    const handleAddAdminUser = () => {
-      formRef.value.validate((valid) => {
-        if (!valid) {
-          return false
-        }
-        addAdminUser(form.value).then(() => {
-          notice.addSuccess()
-          dialogVisible.value = false
-          formRef.value.resetFields()
-        }) 
-      })
-    }
-
-    const handleUpdateAdminUser = () => {
-      formRef.value.validate((valid) => {
-        if (!valid) {
-          return false
-        }
-        editAdminUser(id.value, form.value).then(() => {
-          notice.editSuccess()
-          dialogVisible.value = false
-          props.row.name = form.value.name
-          props.row.status = form.value.status
-          form.value.password = null
-        }) 
-      })
-    }
-    
-    return {
-      formRef,
-      form,
-      rules,
-      dialogVisible,
-      handleAddAdminUser,
-      handleUpdateAdminUser,
-    }
+  title: {
+    type: String
+  },
+  action: {
+    type: String,
+  },
+  row: {
+    type: Object,
   }
 })
+
+const emit = defineEmits(["update:modelValue"])
+
+const formRef = ref(null)
+
+const form = ref({
+  name: null,
+  username: null,
+  password: null,
+  status: true,
+})
+
+let rules = {
+  name: [
+    { required: true },
+    { min: 3, max: 255 }
+  ],
+}
+if (props.action === 'add') {
+  rules = {...rules, email: [
+    { required: true},
+    { min: 5, max: 18 }
+  ],
+  password: [
+    { required: true },
+    { min: 8, max: 32 }
+  ]}
+}
+
+const dialogVisible = ref(false)
+
+watch(() => props.modelValue, (v) => {
+  dialogVisible.value = v
+})
+
+watch(dialogVisible, (v) => {
+  emit("update:modelValue", v)
+})
+
+const id = ref(null)
+watch(() => props.row, (row) => {
+  id.value = row.id
+  form.value.name = row.name
+  form.value.status = row.status
+})
+
+const handleAddAdminUser = () => {
+  formRef.value.validate((valid) => {
+    if (!valid) {
+      return false
+    }
+    addAdminUser(form.value).then(() => {
+      notice.addSuccess()
+      dialogVisible.value = false
+      formRef.value.resetFields()
+    }) 
+  })
+}
+
+const handleUpdateAdminUser = () => {
+  formRef.value.validate((valid) => {
+    if (!valid) {
+      return false
+    }
+    editAdminUser(id.value, form.value).then(() => {
+      notice.editSuccess()
+      dialogVisible.value = false
+      props.row.name = form.value.name
+      props.row.status = form.value.status
+      form.value.password = null
+    }) 
+  })
+}
 </script>
 <style lang="scss" scoped>
 

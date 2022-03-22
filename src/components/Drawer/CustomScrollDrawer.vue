@@ -18,54 +18,49 @@
       </div>
   </el-drawer>
 </template>
-<script>
-import { defineComponent, watch, ref } from 'vue'
+<script setup>
+import { watch, ref } from 'vue'
 
-export default defineComponent({
-  name: 'CustomScrollDrawer',
-  props: {
-    modelValue: {
-      type: Boolean,
-      default: false,
-    },
-    title: {
-      type: String,
-    },
-    direction: {
-      type: String,
-      default: 'rtl'
-    },
-    size: {
-      type: [String, Number],
-      default: '30%',
-    },
-    padding: {
-      type: String,
-      default: '20px'
-    },
-    fullContent: {
-      type: Boolean,
-      default: false,
-    }
+const props = defineProps({
+  modelValue: {
+    type: Boolean,
+    default: false,
   },
-  setup(props, { emit }) {
-    const drawer = ref(false)
-
-    watch(() => props.modelValue, (v) => {
-      drawer.value = v
-    })
-
-    watch(drawer, (d) => {
-      emit("update:modelValue", d)
-    })
-
-    return {
-      drawer,
-      cotnentClass: props.fullContent ? 'full-content' : 'content',
-      paddingStyle: `padding:${props.padding}`
-    }
+  title: {
+    type: String,
+  },
+  direction: {
+    type: String,
+    default: 'rtl'
+  },
+  size: {
+    type: [String, Number],
+    default: '30%',
+  },
+  padding: {
+    type: String,
+    default: '20px'
+  },
+  fullContent: {
+    type: Boolean,
+    default: false,
   }
 })
+
+const emit = defineEmits(['update:modelValue'])
+
+const drawer = ref(false)
+
+watch(() => props.modelValue, (v) => {
+  drawer.value = v
+})
+
+watch(drawer, (d) => {
+  emit("update:modelValue", d)
+})
+
+const cotnentClass = props.fullContent ? 'full-content' : 'content'
+const paddingStyle = `padding:${props.padding}`
 </script>
 <style lang="scss" scoped>
   .content {

@@ -34,147 +34,129 @@
     </template>
   </custom-scroll-drawer>
 </template>
-<script>
+<script setup>
 import CustomScrollDrawer from '@/components/Drawer/CustomScrollDrawer.vue'
 import GuardSelect from '@/components/Select/GuardSelect.vue'
 import PermissionGroupSelect from '@/components/Select/PermissionGroupSelect.vue'
 import MenuCascader from '@/components/Cascader/MenuCascader.vue'
-import { defineComponent, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { addMenu, editMenu } from '@/api/menu'
 import notice from '@/utils/notice'
 import { More } from '@element-plus/icons-vue'
 import SelectIconPopover from './SelectIconPopover.vue'
 
-export default defineComponent({
-  components: { 
-    CustomScrollDrawer,
-    GuardSelect,
-    PermissionGroupSelect,
-    MenuCascader,
-    SelectIconPopover,
+const props = defineProps({
+  modelValue: false,
+  title: {
+    type: String,
   },
-  name: 'PermissionFormDrawer',
-  props: {
-    modelValue: false,
-    title: {
-      type: String,
-    },
-    action: {
-      type: String,
-      default: 'add'
-    },
-    row: {
-      type: Object,
-    }
+  action: {
+    type: String,
+    default: 'add'
   },
-  setup(props, { emit }) {
-    const drawer = ref(false)
-    const actionType = ref(props.action)
-
-    let defualtForm = {
-      name: null,
-      uri: null,
-      permission_name: null,
-      guard_name: null,
-      parent_id: null,
-      icon: null,
-      sequence: 0,
-    }
-
-    const form = ref(defualtForm)
-    const formRef = ref(null)
-
-    watch(() => props.modelValue, (v) => {
-      drawer.value = v
-    })
-
-    watch(() => props.action, (a) => {
-      if (a === 'add') {
-        form.value = defualtForm
-      }
-      actionType.value = a
-    })
-
-    watch(drawer, (d) => {
-      emit("update:modelValue", d)
-    })
-
-    watch(() => props.row, (row) => {
-      form.value = {
-        name: row.name,
-        uri: row.uri,
-        permission_name: row.permission_name,
-        guard_name: row.guard_name,
-        parent_id: row.parent_id,
-        icon: row.icon,
-        sequence: row.sequence,
-      }
-    })
-
-    const handleAdd = () => {
-      formRef.value.validate((valid) => {
-        if (!valid) {
-          return false
-        }
-        addMenu(form.value).then(() => {
-          notice.addSuccess()
-          drawer.value = false
-          formRef.value.resetFields()
-        })
-      })
-    }
-
-    const handleEdit = () => {
-      formRef.value.validate((valid) => {
-        if (!valid) {
-          return false
-        }
-        editMenu(props.row.id, form.value).then(() => {
-          notice.editSuccess()
-          drawer.value = false
-          props.row.name = form.value.name
-          props.row.uri = form.value.uri
-          props.row.permission_name = form.value.permission_name
-          props.row.guard_name = form.value.guard_name
-          props.row.parent_id = form.value.parent_id
-          props.row.icon = form.value.icon
-          props.row.sequence = form.value.sequence
-          //form.value = defualtForm
-        })
-      })
-    }
-
-    return {
-      drawer,
-      form,
-      formRef,
-      handleAdd,
-      handleEdit,
-      actionType,
-      More,
-      rules: {
-        name: [
-          { required: true },
-          { min: 1, max: 255 }
-        ],
-        uri: [
-          { required: true },
-          { min: 1, max: 255 }
-        ],
-        guard_name: [
-          { required: true },
-          { min: 1, max: 255 }
-        ],
-        parent_id: [
-          { type: 'number' }
-        ],
-        sequence: [
-          { type: 'number' }
-        ]
-      }
-    }
-  },
+  row: {
+    type: Object,
+  }
 })
+
+const emit = defineEmits(['update:modelValue'])
+
+const drawer = ref(false)
+const actionType = ref(props.action)
+
+let defualtForm = {
+  name: null,
+  uri: null,
+  permission_name: null,
+  guard_name: null,
+  parent_id: null,
+  icon: null,
+  sequence: 0,
+}
+
+const form = ref(defualtForm)
+const formRef = ref(null)
+
+watch(() => props.modelValue, (v) => {
+  drawer.value = v
+})
+
+watch(() => props.action, (a) => {
+  if (a === 'add') {
+    form.value = defualtForm
+  }
+  actionType.value = a
+})
+
+watch(drawer, (d) => {
+  emit("update:modelValue", d)
+})
+
+watch(() => props.row, (row) => {
+  form.value = {
+    name: row.name,
+    uri: row.uri,
+    permission_name: row.permission_name,
+    guard_name: row.guard_name,
+    parent_id: row.parent_id,
+    icon: row.icon,
+    sequence: row.sequence,
+  }
+})
+
+const handleAdd = () => {
+  formRef.value.validate((valid) => {
+    if (!valid) {
+      return false
+    }
+    addMenu(form.value).then(() => {
+      notice.addSuccess()
+      drawer.value = false
+      formRef.value.resetFields()
+    })
+  })
+}
+
+const handleEdit = () => {
+  formRef.value.validate((valid) => {
+    if (!valid) {
+      return false
+    }
+    editMenu(props.row.id, form.value).then(() => {
+      notice.editSuccess()
+      drawer.value = false
+      props.row.name = form.value.name
+      props.row.uri = form.value.uri
+      props.row.permission_name = form.value.permission_name
+      props.row.guard_name = form.value.guard_name
+      props.row.parent_id = form.value.parent_id
+      props.row.icon = form.value.icon
+      props.row.sequence = form.value.sequence
+      //form.value = defualtForm
+    })
+  })
+}
+
+const rules =  {
+  name: [
+    { required: true },
+    { min: 1, max: 255 }
+  ],
+  uri: [
+    { required: true },
+    { min: 1, max: 255 }
+  ],
+  guard_name: [
+    { required: true },
+    { min: 1, max: 255 }
+  ],
+  parent_id: [
+    { type: 'number' }
+  ],
+  sequence: [
+    { type: 'number' }
+  ]
+}
 </script>
 <style lang="scss" scoped>
 

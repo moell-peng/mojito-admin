@@ -30,7 +30,7 @@
     </template>
   </custom-scroll-drawer>
 </template>
-<script>
+<script setup>
 import CustomScrollDrawer from '@/components/Drawer/CustomScrollDrawer.vue'
 import GuardSelect from '@/components/Select/GuardSelect.vue'
 import PermissionGroupSelect from '@/components/Select/PermissionGroupSelect.vue'
@@ -38,120 +38,104 @@ import { defineComponent, ref, watch } from 'vue'
 import { addPermission, editPermission } from '@/api/permission'
 import notice from '@/utils/notice'
 
-export default defineComponent({
-  components: { 
-    CustomScrollDrawer,
-    GuardSelect,
-    PermissionGroupSelect,
+const props = defineProps({
+  modelValue: false,
+  action: {
+    type: String,
+    default: 'add',
   },
-  name: 'PermissionFormDrawer',
-  props: {
-    modelValue: false,
-    action: {
-      type: String,
-      default: 'add',
-    },
-    row: {
-      type: Object,
-    }
-  },
-  setup(props, { emit }) {
-    const drawer = ref(false)
-
-    let defaultForm = {
-      name: null,
-      display_name: null,
-      guard_name: null,
-      pg_id: null,
-      icon: null,
-      sequence: 0,
-      description: null,
-    }
-    const form = ref(defaultForm)
-
-    const formRef = ref(null)
-
-    watch(() => props.modelValue, (v) => {
-      drawer.value = v
-    })
-
-    watch(drawer, (d) => {
-      emit("update:modelValue", d)
-    })
-
-    watch(() => props.row, v => {
-      form.value.name = v.name
-      form.value.display_name = v.display_name
-      form.value.guard_name = v.guard_name
-      form.value.pg_id = v.pg_id
-      form.value.icon = v.icon
-      form.value.sequence = v.sequence
-      form.value.description = v.description
-    })
-
-    let rules = {
-      name: [
-        { required: true },
-        { min: 1, max: 255 }
-      ],
-      display_name: [
-        { required: true },
-        { min: 1, max: 255 }
-      ],
-      guard_name: [
-        { required: true },
-        { min: 1, max: 255 }
-      ],
-      pg_id: [
-        { required: true, type: 'number' }
-      ]
-    }
-
-    const handleAddAdminUser = () => {
-      formRef.value.validate((valid) => {
-        if (!valid) {
-          return false
-        }
-
-        addPermission(form.value).then(() => {
-          formRef.value.resetFields()
-          notice.addSuccess()
-          drawer.value = false
-        })
-      })
-    }
-
-    const handleEditAdminUser = () => {
-      formRef.value.validate((valid) => {
-        if (!valid) {
-          return false
-        }
-
-        editPermission(props.row.id, form.value).then(() => {
-          props.row.name = form.value.name
-          props.row.display_name = form.value.display_name
-          props.row.pg_id = form.value.pg_id
-          props.row.icon = form.value.icon
-          props.row.sequence = form.value.sequence
-          props.row.description = form.value.description
-          
-          formRef.value.resetFields()
-          notice.editSuccess()
-          drawer.value = false
-        })
-      })
-    }
-
-    return {
-      drawer,
-      form,
-      formRef,
-      rules,
-      handleAddAdminUser,
-      handleEditAdminUser,
-    }
-  },
+  row: {
+    type: Object,
+  }
 })
+
+const emit = defineEmits(['update:modelValue'])
+
+const drawer = ref(false)
+
+let defaultForm = {
+  name: null,
+  display_name: null,
+  guard_name: null,
+  pg_id: null,
+  icon: null,
+  sequence: 0,
+  description: null,
+}
+const form = ref(defaultForm)
+
+const formRef = ref(null)
+
+watch(() => props.modelValue, (v) => {
+  drawer.value = v
+})
+
+watch(drawer, (d) => {
+  emit("update:modelValue", d)
+})
+
+watch(() => props.row, v => {
+  form.value.name = v.name
+  form.value.display_name = v.display_name
+  form.value.guard_name = v.guard_name
+  form.value.pg_id = v.pg_id
+  form.value.icon = v.icon
+  form.value.sequence = v.sequence
+  form.value.description = v.description
+})
+
+let rules = {
+  name: [
+    { required: true },
+    { min: 1, max: 255 }
+  ],
+  display_name: [
+    { required: true },
+    { min: 1, max: 255 }
+  ],
+  guard_name: [
+    { required: true },
+    { min: 1, max: 255 }
+  ],
+  pg_id: [
+    { required: true, type: 'number' }
+  ]
+}
+
+const handleAddAdminUser = () => {
+  formRef.value.validate((valid) => {
+    if (!valid) {
+      return false
+    }
+
+    addPermission(form.value).then(() => {
+      formRef.value.resetFields()
+      notice.addSuccess()
+      drawer.value = false
+    })
+  })
+}
+
+const handleEditAdminUser = () => {
+  formRef.value.validate((valid) => {
+    if (!valid) {
+      return false
+    }
+
+    editPermission(props.row.id, form.value).then(() => {
+      props.row.name = form.value.name
+      props.row.display_name = form.value.display_name
+      props.row.pg_id = form.value.pg_id
+      props.row.icon = form.value.icon
+      props.row.sequence = form.value.sequence
+      props.row.description = form.value.description
+      
+      formRef.value.resetFields()
+      notice.editSuccess()
+      drawer.value = false
+    })
+  })
+}
 </script>
 <style lang="scss" scoped>
 

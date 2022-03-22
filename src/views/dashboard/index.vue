@@ -4,8 +4,6 @@
   </el-card>
 </template>
 
-<script>
-export default {
-  name: 'adminDashboard',
-}
+<script setup>
+
 </script>

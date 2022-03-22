@@ -17,41 +17,25 @@
   </el-container>
 </template>
 
-<script>
+<script setup>
 import MojitoHeader from "@/components/Layout/Header.vue"
 import NavBar from "@/components/Layout/NavBar.vue"
 import TagsView from "@/components/Layout/TagsView.vue"
 import { useStore } from 'vuex'
 import { ref, computed } from 'vue'
 
-export default {
-  components: { 
-    MojitoHeader,
-    NavBar,
-    TagsView,
-  },
-  name: 'MainPage',
-  setup() {
-    const store = useStore()
+const store = useStore()
 
-    store.dispatch('loadPermissions')
+store.dispatch('loadPermissions')
 
-    let isCollapse = ref(false)
+let isCollapse = ref(false)
 
-    const cacheTags = computed(() => {
-      return store.getters.cacheTags
-    })
+const cacheTags = computed(() => {
+  return store.getters.cacheTags
+})
 
-    const changeMenuStatus = (status) => {
-        isCollapse.value = status
-    }
-
-    return {
-      isCollapse,
-      cacheTags,
-      changeMenuStatus,
-    }
-  },
+const changeMenuStatus = (status) => {
+    isCollapse.value = status
 }
 </script>
 <style lang="scss" scoped>

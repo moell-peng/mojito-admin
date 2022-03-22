@@ -87,7 +87,7 @@
   <admin-user-form-dialog :title="$t('edit')" :row="updateRow" action="edit" v-model="editDialogVisible"></admin-user-form-dialog>
 </template>
 
-<script>
+<script setup>
 import { getAdminUserList, deleteAdminUser } from '@/api/adminUser'
 import UserAssignRole from '@/components/User/AssignRole.vue'
 import TableAction from '@/components/Table/TableAction.vue'
@@ -97,67 +97,47 @@ import { useStore } from 'vuex'
 import { tableDataFormat, tableDefaultData } from '@/utils/table'
 import notice from '@/utils/notice'
 
-export default {
-  name: 'adminUserIndex',
-  components: {
-    UserAssignRole,
-    TableAction,
-    AdminUserFormDialog,
-  },
-  setup() {
-    const store = useStore()
-    const addDialogVisible = ref(false)
-    const editDialogVisible = ref(false)
-    const table = tableDefaultData()
+const store = useStore()
+const addDialogVisible = ref(false)
+const editDialogVisible = ref(false)
+const table = tableDefaultData()
 
-    const updateRow = ref({})
-    const handleEdit = (row) => {
-      editDialogVisible.value = true
-      updateRow.value = row
-    }
-
-    const requestData = () => {
-      table.loading = true
-      getAdminUserList(table.getQueryParams()).then( response => {
-        tableDataFormat(response, table)
-      })
-    }
-
-    requestData()
-
-    const handleDelete = (index, row) => {
-      deleteAdminUser(row.id).then( () => {
-        notice.deleteSuccess()
-        table.data.splice(index, 1)
-      })
-    }
-
-    const assignRole = ref({
-      id: 0,
-      guardName: 'admin',
-      dialogVisible: false,
-    })
-
-    const handleAssignRole = (row) => {
-      assignRole.value.id = row.id
-      assignRole.value.dialogVisible = true
-    }
-
-    return {
-      table,
-      requestData,
-      addDialogVisible,
-      editDialogVisible,
-      handleEdit,
-      updateRow,
-      handleDelete,
-      assignRole,
-      handleAssignRole,
-      hasAddPermission: computed(() => store.getters.hasPermission("admin-user.store")),
-      hasEditPermission: computed(() => store.getters.hasPermission("admin-user.update")),
-      hasDeletePermission: computed(() => store.getters.hasPermission("admin-user.destroy")),
-      hasAssignRolePermission: computed(() => store.getters.hasPermission("admin-user.assign-roles")),
-    }
-  },
+const updateRow = ref({})
+const handleEdit = (row) => {
+  editDialogVisible.value = true
+  updateRow.value = row
 }
+
+const requestData = () => {
+  table.loading = true
+  getAdminUserList(table.getQueryParams()).then( response => {
+    tableDataFormat(response, table)
+  })
+}
+
+requestData()
+
+const handleDelete = (index, row) => {
+  deleteAdminUser(row.id).then( () => {
+    notice.deleteSuccess()
+    table.data.splice(index, 1)
+  })
+}
+
+const assignRole = ref({
+  id: 0,
+  guardName: 'admin',
+  dialogVisible: false,
+})
+
+const handleAssignRole = (row) => {
+  assignRole.value.id = row.id
+  assignRole.value.dialogVisible = true
+}
+
+const hasAddPermission = computed(() => store.getters.hasPermission("admin-user.store"))
+const hasEditPermission = computed(() => store.getters.hasPermission("admin-user.update"))
+const hasDeletePermission = computed(() => store.getters.hasPermission("admin-user.destroy"))
+const hasAssignRolePermission = computed(() => store.getters.hasPermission("admin-user.assign-roles"))
+
 </script>

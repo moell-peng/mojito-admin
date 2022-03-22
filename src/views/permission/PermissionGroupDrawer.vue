@@ -61,7 +61,7 @@
   </el-dialog>
   </custom-scroll-drawer>
 </template>
-<script>
+<script setup>
 import CustomScrollDrawer from '@/components/Drawer/CustomScrollDrawer.vue'
 import { defineComponent, ref, watch, computed } from 'vue'
 import { useStore } from 'vuex'
@@ -71,118 +71,96 @@ import notice from '@/utils/notice'
 import TableAction from '@/components/Table/TableAction.vue'
 import { Refresh, Plus} from "@element-plus/icons-vue"
 
-export default defineComponent({
-  components: { 
-    CustomScrollDrawer,
-    TableAction,
-  },
-  name: 'PermissionGroupDrawer',
-  props: {
-    modelValue: false,
-  },
-  setup(props, { emit }) {
-    const drawer = ref(props.modelValue)
-    const store = useStore()
-    const table = tableDefaultData()
-    const dialogVisible = ref(false)
-    const formRef = ref(null)
-    const form = ref({
-      name: null,
-    })
-
-    watch(() => props.modelValue, (v) => {
-      drawer.value = v
-    })
-
-    watch(drawer, (d) => {
-      emit("update:modelValue", d)
-    })
-
-    const requestData = () => {
-      table.loading = true
-      getPermissionGroupList({page: table.pagination.currentPage}).then( response => {
-        tableDataFormat(response, table)
-      })
-    }
-    requestData()
-
-    const updateRow = ref(null)
-
-    const dialogAction = ref('add')
-
-    const handleEdit = (row) => {
-      dialogVisible.value = true
-      form.value.name = row.name
-      updateRow.value = row
-      dialogAction.value = 'edit'
-    }
-
-    const handleAdd = () => {
-      form.value.name = null
-      dialogAction.value = 'add'
-      dialogVisible.value = true
-    }
-
-    const updatePermissionGroup = () => {
-      formRef.value.validate((valid) => {
-        if (!valid) {
-          return false
-        }
-
-        editPermissionGroup(updateRow.value.id, form.value).then( () => {
-          updateRow.value.name = form.value.name
-          notice.editSuccess()
-          dialogVisible.value = false
-        })
-      })
-    }
-
-    const storePermissionGroup = () => {
-      formRef.value.validate((valid) => {
-        if (!valid) {
-          return false
-        }
-        addPermissionGroup(form.value).then(() => {
-          notice.addSuccess()
-          dialogVisible.value = false
-        })
-      })
-    }
-
-    const handleDelete = (index, row) => {
-      deletePermissionGroup(row.id).then(() => {
-        notice.deleteSuccess()
-        table.data.splice(index, 1)
-      })
-    }
-
-    return {
-      drawer,
-      dialogVisible,
-      formRef,
-      form,
-      handleEdit,
-      handleAdd,
-      table,
-      dialogAction,
-      updatePermissionGroup,
-      storePermissionGroup,
-      handleDelete,
-      requestData,
-      Refresh,
-      Plus,
-      hasAddBtn: computed(() => store.getters.hasPermission("permission-group.store")),
-      hasEditBtn: computed(() => store.getters.hasPermission("permission-group.update")),
-      hasDeleteBtn: computed(() => store.getters.hasPermission("permission-group.destroy")),
-      rules: {
-        name: [
-          { required: true },
-          { min: 1, max: 255 }
-        ]
-      }
-    }
-  },
+const props = defineProps({
+  modelValue: false,
 })
+
+const emit = defineEmits(["update:modelValue"])
+
+const drawer = ref(props.modelValue)
+const store = useStore()
+const table = tableDefaultData()
+const dialogVisible = ref(false)
+const formRef = ref(null)
+const form = ref({
+  name: null,
+})
+
+watch(() => props.modelValue, (v) => {
+  drawer.value = v
+})
+
+watch(drawer, (d) => {
+  emit("update:modelValue", d)
+})
+
+const requestData = () => {
+  table.loading = true
+  getPermissionGroupList({page: table.pagination.currentPage}).then( response => {
+    tableDataFormat(response, table)
+  })
+}
+requestData()
+
+const updateRow = ref(null)
+
+const dialogAction = ref('add')
+
+const handleEdit = (row) => {
+  dialogVisible.value = true
+  form.value.name = row.name
+  updateRow.value = row
+  dialogAction.value = 'edit'
+}
+
+const handleAdd = () => {
+  form.value.name = null
+  dialogAction.value = 'add'
+  dialogVisible.value = true
+}
+
+const updatePermissionGroup = () => {
+  formRef.value.validate((valid) => {
+    if (!valid) {
+      return false
+    }
+
+    editPermissionGroup(updateRow.value.id, form.value).then( () => {
+      updateRow.value.name = form.value.name
+      notice.editSuccess()
+      dialogVisible.value = false
+    })
+  })
+}
+
+const storePermissionGroup = () => {
+  formRef.value.validate((valid) => {
+    if (!valid) {
+      return false
+    }
+    addPermissionGroup(form.value).then(() => {
+      notice.addSuccess()
+      dialogVisible.value = false
+    })
+  })
+}
+
+const handleDelete = (index, row) => {
+  deletePermissionGroup(row.id).then(() => {
+    notice.deleteSuccess()
+    table.data.splice(index, 1)
+  })
+}
+
+const hasAddBtn = computed(() => store.getters.hasPermission("permission-group.store"))
+const hasEditBtn = computed(() => store.getters.hasPermission("permission-group.update"))
+const hasDeleteBtn = computed(() => store.getters.hasPermission("permission-group.destroy"))
+const rules = {
+  name: [
+    { required: true },
+    { min: 1, max: 255 }
+  ]
+}
 </script>
 <style lang="scss" scoped>
 

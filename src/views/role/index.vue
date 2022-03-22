@@ -95,7 +95,7 @@
   <role-assign-permission-drawer v-model="assignPermisionDrawer" :role-id="assignPermissionRole.id" :guard-name="assignPermissionRole.guardName"></role-assign-permission-drawer>
 </template>
 
-<script>
+<script setup>
 import { getRoleList, addRole, editRole, deleteRole } from '@/api/role'
 import GuardSelect from '@/components/Select/GuardSelect.vue'
 import TableAction from '@/components/Table/TableAction.vue'
@@ -106,137 +106,109 @@ import notice from '@/utils/notice'
 import RoleAssignPermissionDrawer from './RoleAssignPermissionDrawer.vue'
 import { Plus, Search} from '@element-plus/icons-vue'
 
-export default {
-  name: 'roleIndex',
-  components: {
-    GuardSelect,
-    TableAction,
-    RoleAssignPermissionDrawer,
-  },
-  setup() {
-    const table = tableDefaultData()
-    const store = useStore()
+const table = tableDefaultData()
+const store = useStore()
 
-    const requestData = () => {
-      table.loading = true
-      getRoleList(table.getQueryParams()).then( response => {
-        tableDataFormat(response, table)
-      })
+const requestData = () => {
+  table.loading = true
+  getRoleList(table.getQueryParams()).then( response => {
+    tableDataFormat(response, table)
+  })
+}
+
+requestData()
+
+const formRef = ref(null)
+const form = ref({
+  name: null,
+  guard_name: null,
+  description: null,
+})
+const dialogFormVisible = ref(false)
+
+const dialogAction = ref('add')
+
+const showAddRoleDialog = () => {
+  dialogAction.value = 'add'
+  dialogFormVisible.value = true
+  form.value = {
+    name: null,
+    guard_name: null,
+    description: null,
+  }
+}
+
+const updateRow = ref({})
+
+const showEditRoleDialog = (row) => {
+  dialogAction.value = 'edit'
+  dialogFormVisible.value = true
+  form.value = {
+    name: row.name,
+    guard_name: row.guard_name,
+    description: row.description,
+  }
+  updateRow.value = row
+}
+
+const handleAddRole = () => {
+  formRef.value.validate((valid) => {
+    if (!valid) {
+      return false
     }
-
-    requestData()
-
-    const formRef = ref(null)
-    const form = ref({
-      name: null,
-      guard_name: null,
-      description: null,
+    
+    addRole(form.value).then(() => {
+      notice.addSuccess()
+      dialogFormVisible.value = false
     })
-    const dialogFormVisible = ref(false)
+  })
+}
 
-    const dialogAction = ref('add')
-
-    const showAddRoleDialog = () => {
-      dialogAction.value = 'add'
-      dialogFormVisible.value = true
-      form.value = {
-        name: null,
-        guard_name: null,
-        description: null,
-      }
+const handleEditRole = () => {
+  formRef.value.validate((valid) => {
+    if (!valid) {
+      return false
     }
-
-    const updateRow = ref({})
-
-    const showEditRoleDialog = (row) => {
-      dialogAction.value = 'edit'
-      dialogFormVisible.value = true
-      form.value = {
-        name: row.name,
-        guard_name: row.guard_name,
-        description: row.description,
-      }
-      updateRow.value = row
-    }
-
-    const handleAddRole = () => {
-      formRef.value.validate((valid) => {
-        if (!valid) {
-          return false
-        }
-        
-        addRole(form.value).then(() => {
-          notice.addSuccess()
-          dialogFormVisible.value = false
-        })
-      })
-    }
-
-    const handleEditRole = () => {
-      formRef.value.validate((valid) => {
-        if (!valid) {
-          return false
-        }
-        editRole(updateRow.value.id, form.value).then(() => {
-          notice.editSuccess()
-          updateRow.value.name = form.value.name
-          updateRow.value.guard_name = form.value.guard_name
-          updateRow.value.description = form.value.description
-          dialogFormVisible.value = false
-        })
-      })
-    }
-
-    const handleDelete = (index, row) => {
-      deleteRole(row.id).then( () => {
-        notice.deleteSuccess()
-        table.data.splice(index, 1)
-      })
-    }
-
-    const assignPermisionDrawer = ref(false)
-    const assignPermissionRole = ref({
-      id: 0,
-      guardName: null,
+    editRole(updateRow.value.id, form.value).then(() => {
+      notice.editSuccess()
+      updateRow.value.name = form.value.name
+      updateRow.value.guard_name = form.value.guard_name
+      updateRow.value.description = form.value.description
+      dialogFormVisible.value = false
     })
-    const showAssignPermissionDrawer = (row) => {
-      assignPermisionDrawer.value = true
-      assignPermissionRole.value.id = row.id
-      assignPermissionRole.value.guardName = row.guard_name
-    }
+  })
+}
 
-    return {
-      table,
-      requestData,
-      formRef,
-      form,
-      dialogFormVisible,
-      dialogAction,
-      showAddRoleDialog,
-      showEditRoleDialog,
-      handleAddRole,
-      handleEditRole,
-      handleDelete,
-      showAssignPermissionDrawer,
-      assignPermisionDrawer,
-      assignPermissionRole,
-      updatePermission: computed(() => store.getters.hasPermission('role.update')),
-      addPermission: computed(() => store.getters.hasPermission('role.store')),
-      deletePermission: computed(() => store.getters.hasPermission('role.destroy')),
-      assignPermission: computed(() => store.getters.hasPermission('role.assign-permissions')),
-      rules: {
-        name: [
-          { required: true },
-          { min: 1, max: 255 }
-        ],
-        guard_name: [
-          { required: true },
-          { min: 1, max: 255 }
-        ]
-      },
-      Plus,
-      Search,
-    }
-  },
+const handleDelete = (index, row) => {
+  deleteRole(row.id).then( () => {
+    notice.deleteSuccess()
+    table.data.splice(index, 1)
+  })
+}
+
+const assignPermisionDrawer = ref(false)
+const assignPermissionRole = ref({
+  id: 0,
+  guardName: null,
+})
+const showAssignPermissionDrawer = (row) => {
+  assignPermisionDrawer.value = true
+  assignPermissionRole.value.id = row.id
+  assignPermissionRole.value.guardName = row.guard_name
+}
+
+const updatePermission = computed(() => store.getters.hasPermission('role.update'))
+const addPermission = computed(() => store.getters.hasPermission('role.store'))
+const deletePermission = computed(() => store.getters.hasPermission('role.destroy'))
+const assignPermission = computed(() => store.getters.hasPermission('role.assign-permissions'))
+const rules = {
+  name: [
+    { required: true },
+    { min: 1, max: 255 }
+  ],
+  guard_name: [
+    { required: true },
+    { min: 1, max: 255 }
+  ]
 }
 </script>

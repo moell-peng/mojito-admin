@@ -51,7 +51,7 @@
   </el-header>
 </template>
 
-<script>
+<script setup>
 import { computed } from 'vue'
 import config from '@/config'
 import { useRouter } from 'vue-router'
@@ -61,50 +61,36 @@ import { setLocale } from '@/utils/localforage'
 import { getTagTitleName } from '@/utils/helper'
 import { Fold, Expand, Avatar, ArrowDown } from "@element-plus/icons-vue"
 
-export default {
-  name: 'MojitoHeader',
-  components: {
-    Fold, Expand, Avatar, ArrowDown
-  },
-  props: {
-    isCollapse: Boolean
-  },
-  setup(props, { emit }) {
-    const router = useRouter()
-    const store = useStore()
+const props = defineProps({
+  isCollapse: Boolean
+})
 
-    const openChangePassword = () => {
-      router.push({name: 'changePasswordPage'})
-    }
+const emit = defineEmits(['menu'])
+const router = useRouter()
+const store = useStore()
 
-    const logout = () => {
-      store.dispatch("logoutHandle").then(router.push({
-        name: config.loginRouteName
-      }))
-    }
-
-    const i18n = useI18n()
-
-    const changeLang = (lang) => {
-      store.commit("SET_LOCALE", lang)
-      i18n.locale.value = lang
-      setLocale(lang)
-    }
-
-    return {
-      openChangePassword,
-      logout,
-      changeLang,
-      getTagTitleName,
-      showAuthorGitHubUrl: config.showAuthorGitHubUrl,
-      switchLanguage: config.switchLanguage,
-      breadcrumb: computed(() => store.getters.breadcrumb),
-      menuOpenOrClose: () => {
-        emit('menu', !props.isCollapse)
-      }
-    }
-  },
+const openChangePassword = () => {
+  router.push({name: 'changePasswordPage'})
 }
+
+const logout = () => {
+  store.dispatch("logoutHandle").then(router.push({
+    name: config.loginRouteName
+  }))
+}
+
+const i18n = useI18n()
+
+const changeLang = (lang) => {
+  store.commit("SET_LOCALE", lang)
+  i18n.locale.value = lang
+  setLocale(lang)
+}
+
+const showAuthorGitHubUrl = config.showAuthorGitHubUrl
+const switchLanguage = config.switchLanguage
+const breadcrumb = computed(() => store.getters.breadcrumb)
+const menuOpenOrClose = () => emit('menu', !props.isCollapse)
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
