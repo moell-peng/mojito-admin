@@ -8,6 +8,14 @@
       <el-form-item :label="$t('password')" prop="password">
         <el-input type="Password" v-model="form.password" auto-complete="off"></el-input>
       </el-form-item>
+      <el-form-item :label="$t('captcha')" prop="captcha">
+        <div class="captcha-code">
+          <el-input v-model="form.captcha"></el-input>
+        </div>
+        <div class="captcha-img" @click="refreshCaptcha">
+          <img :src="captcha.imageContent" style="height:30px"/>
+        </div>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" plain @click="submitForm()">{{ $t('submit') }}</el-button>
         <el-button plain @click="resetForm()">{{ $t("reset") }}</el-button>
@@ -16,15 +24,35 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import config from '@/config'
+import { getCaptcha } from "@/api/captcha"
 
 const { t } = useI18n()
 const store = useStore()
 const router = useRouter()
+
+const captcha = reactive({
+  key: null,
+  imageContent: null,
+  expiredAt: null,
+})
+
+const refreshCaptcha = () => {
+  getCaptcha().then(response => {
+    const data = response.data.data
+    captcha.key = data.key
+    captcha.imageContent = data.image_content
+    captcha.expiredAt = data.expired_at
+  })
+}
+
+onMounted(() => {
+  refreshCaptcha()
+})
 
 const rules = {
   username: [
@@ -32,20 +60,27 @@ const rules = {
   ],
   password: [
     { required: true, trigger: 'blur', message: t('rules.login.password.required') }
+  ],
+  captcha: [
+    { required: true, trigger: 'blur', message: t('rules.login.captcha.required') }
   ]
 }
 
 const form = ref({
   username: null,
   password: null,
+  captcha: null,
 })
 
 const loginForm = ref(null)
 
 const submitForm = () => {
+  console.log({captcha_key: captcha.key, ...form.value})
   loginForm.value.validate((valid) => {
     if (valid) {
-      store.dispatch("loginHandle", form.value).then(() => {
+      const data = {captcha_key: captcha.key, ...form.value}
+
+      store.dispatch("loginHandle", data).then(() => {
         router.push({
           name: config.homeRouteName
         })
@@ -58,7 +93,7 @@ const resetForm = () => {
     loginForm.value.resetFields()
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
   h2 {
     text-align: center;
     color: #42b983;
@@ -79,5 +114,15 @@ const resetForm = () => {
     -webkit-border-radius: 5px;
     border-radius: 5px;
     -moz-border-radius: 5px;
+    .captcha-code {
+      flex: 1;
+    }
+    .captcha-img {
+      width:112px;
+      margin-left:5px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
   }
 </style>

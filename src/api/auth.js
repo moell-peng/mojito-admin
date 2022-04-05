@@ -1,11 +1,9 @@
 import http from '@/utils/http'
 import config from '@/config'
 
-export const login = ({ username, password }) => {
+export const login = (data) => {
   return http.post('/api/auth/login', {
-    username,
-    password,
-    guard: config.guard
+    guard: config.guard, ...data,
   })
 }
 

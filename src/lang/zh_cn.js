@@ -64,6 +64,7 @@ export default {
   logout: "退出登录",
   back: "返回",
   language: '语言',
+  captcha: "验证码",
   notFoundErrorMessage: "抱歉，请求错误或访问页面不存在!",
   rules: {
     login: {
@@ -72,6 +73,9 @@ export default {
       },
       password: {
         required: '请输入正确的密码'
+      },
+      captcha: {
+        required: '请输入正确的验证码',
       }
     }
   }

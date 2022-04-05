@@ -16,9 +16,9 @@ const mutations = {
 }
 
 const actions = {
-  loginHandle ({ commit }, { username, password }) {
+  loginHandle ({ commit }, data) {
     return new Promise((resolve, reject) => {
-      return login({username, password})
+      return login(data)
         .then(response => {
           const token = response.data.data
 

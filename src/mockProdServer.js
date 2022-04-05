@@ -5,6 +5,7 @@ import menuMock from '../mock/menu'
 import permissionMock from '../mock/permission'
 import permissionGroupMock from '../mock/permissionGroup'
 import roleMock from '../mock/role'
+import captchaMock from '../mock/captcha'
 
 export function setupProdMockServer() {
   createProdMockServer([
@@ -14,5 +15,6 @@ export function setupProdMockServer() {
     ...permissionMock,
     ...permissionGroupMock,
     ...roleMock,
+    ...captchaMock,
   ]);
 }

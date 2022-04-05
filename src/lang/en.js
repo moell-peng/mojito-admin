@@ -65,6 +65,7 @@ export default {
   logout: "Logout",
   back: "back",
   language: 'Language',
+  captcha: "Captcha",
   notFoundErrorMessage: "Sorry, the request is wrong or the visited page does not exist!",
   rules: {
     login: {
@@ -73,6 +74,9 @@ export default {
       },
       password: {
         required: 'Please enter the correct password'
+      },
+      captcha: {
+        required: 'Please enter correct verify code',
       }
     }
   }
