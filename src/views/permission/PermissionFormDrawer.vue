@@ -1,5 +1,5 @@
 <template>
-  <custom-scroll-drawer :title="action == 'add' ? $t('add') : $t('edit')" v-model="drawer" direction="rtl" :size="500">
+  <custom-scroll-drawer :title="action === 'add' ? $t('add') : $t('edit')" v-model="drawer" direction="rtl" size="50%">
     <el-form :model="form" :rules="rules" ref="formRef" label-width="110px">
       <el-form-item :label="$t('name')" prop="name">
         <el-input v-model="form.name"></el-input>

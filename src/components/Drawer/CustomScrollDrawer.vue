@@ -1,21 +1,21 @@
 <template>
   <el-drawer
-    :title="title"
-    v-model="drawer"
-    custom-class="custom-scroll-drawer"
-    :direction="direction"
-    :size="size"
-    destroy-on-close>
-      <div :class="cotnentClass">
-        <el-scrollbar>
-          <div :style="paddingStyle">
-            <slot></slot>
-          </div>
-        </el-scrollbar>
-      </div>
-      <div class="footer" v-if="!fullContent">
-        <slot name="footer"></slot>
-      </div>
+      :title="title"
+      v-model="drawer"
+      custom-class="custom-scroll-drawer"
+      :direction="direction"
+      :size="size"
+      destroy-on-close>
+    <div :class="contentClass">
+      <el-scrollbar>
+        <div :style="paddingStyle">
+          <slot></slot>
+        </div>
+      </el-scrollbar>
+    </div>
+    <div class="footer" v-if="!fullContent">
+      <slot name="footer"></slot>
+    </div>
   </el-drawer>
 </template>
 <script setup>
@@ -59,28 +59,27 @@ watch(drawer, (d) => {
   emit("update:modelValue", d)
 })
 
-const cotnentClass = props.fullContent ? 'full-content' : 'content'
+const contentClass = props.fullContent ? 'full-content' : 'content'
 const paddingStyle = `padding:${props.padding}`
 </script>
 <style lang="scss" scoped>
-  .content {
-    border-top: 1px solid #ebeef5;
-    height: calc(100% - 60px);
-    position: relative;
-  }
-  .full-content {
-    border-top: 1px solid #ebeef5;
-    height: 100%;
-    position: relative;
-  }
-  .footer {
-    height:60px;
-    width:100%;
-    position: absolute;
-    line-height:60px;
-    bottom: 0;
-    text-align: right;
-    padding-right: 20px;
-    border-top: 1px solid #ebeef5;
-  }
+.content {
+  height: calc(100% - 60px);
+  position: relative;
+  border-top: 1px solid #ebeef5;
+}
+.full-content {
+  border-top: 1px solid #ebeef5;
+  height: 100%;
+  position: relative;
+}
+.footer {
+  height:60px;
+  width: calc(100% - 40px);
+  position: absolute;
+  line-height:60px;
+  bottom: 0;
+  text-align: right;
+  border-top: 1px solid #ebeef5;
+}
 </style>

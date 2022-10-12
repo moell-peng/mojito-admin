@@ -52,15 +52,17 @@
         <template #default="scope">
           <el-button
                   v-if="updatePermission"
-                  type="text"
+                  type="primary"
+                  :link="true"
                   @click="showEditRoleDialog(scope.row)">{{ $t('edit') }}</el-button>
           <el-button
                   v-if="assignPermission"
                   @click="showAssignPermissionDrawer(scope.row)"
-                  type="text">{{ $t('assignPermission') }}</el-button>
+                  type="primary"
+                  :link="true">{{ $t('assignPermission') }}</el-button>
           <el-popconfirm v-if="deletePermission" :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
             <template #reference>
-              <el-button type="text">{{ $t('delete') }}</el-button>
+              <el-button type="danger" :link="true">{{ $t('delete') }}</el-button>
             </template>
           </el-popconfirm>
         </template>

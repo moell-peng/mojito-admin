@@ -58,11 +58,12 @@
         <template #default="scope">
           <el-button
                   v-if="hasUpdatePermission"
-                  type="text"
+                  type="primary"
+                  :link="true"
                   @click="handleEdit(scope.row)">{{ $t('edit') }}</el-button>
           <el-popconfirm v-if="hasDeletePermission" :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
             <template #reference>
-              <el-button type="text">{{ $t('delete') }}</el-button>
+              <el-button type="danger" :link="true">{{ $t('delete') }}</el-button>
             </template>
           </el-popconfirm>
         </template>
