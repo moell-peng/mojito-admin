@@ -2,8 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { getToken, getPermissions } from '@/utils/localforage'
 import routes from './routes'
 import config from '@/config'
-import store from '@/store'
 import { ElMessage } from 'element-plus'
+import { useAuthStore } from "@/store/auth"
 
 
 const router = createRouter({
@@ -20,8 +20,9 @@ router.beforeEach((to, from, next) => {
         if (!token || !token.hasOwnProperty('token')) {
           reject({ name : config.loginRouteName})
         } else {
-          if (!store.getters.token) {
-            store.commit('SET_TOKEN', {token})
+          const authStore = useAuthStore()
+          if (!authStore.token) {
+            authStore.setToken({ token })
           }
           resolve()
         }

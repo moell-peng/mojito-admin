@@ -41,16 +41,15 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import config from '@/config'
-import { useI18n } from 'vue-i18n'
 import { getTagTitleName } from '@/utils/helper'
 import { Close, ArrowLeft, ArrowRight, StarFilled } from "@element-plus/icons-vue"
+import { useTagStore } from "@/store/tag"
 
 let tagsViewLeft = ref(0)
 
-const store = useStore()
+const tagStore = useTagStore()
 const route = useRoute()
 const router = useRouter()
 
@@ -60,31 +59,31 @@ const isStar = (tag) => {
 
 const closeAll = (tag) => {
   let tagList = []
-  store.getters.tags.forEach((item, index) => {
+  tagStore.tags.forEach((item, index) => {
     if (item.closable) {
       tagList.push(index)
     }
   })
 
-  store.commit('CLOSE_TAG_HANDLE', tagList)
-  router.push({path: config.dashboardFullPath})
+  tagStore.closeTagHandle(tagList)
+  router.push({ path: config.dashboardFullPath })
 }
 
 const closeOther = () => {
   let tagList = []
-  store.getters.tags.forEach((item, index) => {
+  tagStore.tags.forEach((item, index) => {
     if (item.closable && item.fullPath !== route.fullPath) {
       tagList.push(index)
     }
   })
 
-  store.commit('CLOSE_TAG_HANDLE', tagList)
+  tagStore.closeTagHandle(tagList)
 }
 
 const closeRight = () => {
   let tagList = []
   let flag = false
-  store.getters.tags.forEach((item, index) => {
+  tagStore.tags.forEach((item, index) => {
     if (item.fullPath === route.fullPath) {
       flag = true
     } else if (item.closable && flag) {
@@ -92,13 +91,13 @@ const closeRight = () => {
     }
   })
 
-  store.commit('CLOSE_TAG_HANDLE', tagList)
+  tagStore.closeTagHandle(tagList)
 }
 
 const closeLeft = () => {
   let tagList = []
   let flag = true
-  store.getters.tags.forEach((item, index) => {
+  tagStore.tags.forEach((item, index) => {
     if (item.fullPath === route.fullPath) {
       flag = false
     }
@@ -107,7 +106,7 @@ const closeLeft = () => {
     }
   })
 
-  store.commit('CLOSE_TAG_HANDLE', tagList)
+  tagStore.closeTagHandle(tagList)
 }
 
 const tagsListRef = ref(null)
@@ -130,8 +129,8 @@ const tagsScroll = (offset) => {
   }
 }
 
-const tagList =  store.getters.tags
-const closeTagPage = (tag) => store.dispatch('closeTagView', tag.fullPath)
+const tagList =  tagStore.tags
+const closeTagPage = (tag) => tagStore.closeTagView(tag.fullPath)
 const isActive = (tag) => tag.fullPath === route.fullPath ? '' : '#fff'
 const openTagPage = (tag) => router.push({path: tag.fullPath})
 </script>

@@ -26,13 +26,13 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useStore } from 'vuex'
+import { useAuthStore } from "@/store/auth"
 import { useRouter } from 'vue-router'
 import config from '@/config'
 import { getCaptcha } from "@/api/captcha"
 
 const { t } = useI18n()
-const store = useStore()
+const authStore = useAuthStore()
 const router = useRouter()
 
 const captcha = reactive({
@@ -75,12 +75,11 @@ const form = ref({
 const loginForm = ref(null)
 
 const submitForm = () => {
-  console.log({captcha_key: captcha.key, ...form.value})
   loginForm.value.validate((valid) => {
     if (valid) {
       const data = {captcha_key: captcha.key, ...form.value}
 
-      store.dispatch("loginHandle", data).then(() => {
+      authStore.loginHandle(data).then(() => {
         router.push({
           name: config.homeRouteName
         })

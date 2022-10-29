@@ -1,10 +1,6 @@
 import routers from '@/router/routes';
-import store from '@/store'
 import i18n from '@/lang'
-
-export const hasPermission = (name) => {
-  return store.getters.permissions.indexOf(name) >= 0
-}
+import { useAppStore } from "@/store/app"
 
 export const routeByName = (name) => {
   let router;
@@ -83,5 +79,5 @@ export const getNodeParentPath = (id, nodes, path = {}) => {
 export const getTagTitleName = (titleKey) => {
   let metaKey = `meta.title.${titleKey}`
 
-  return i18n.global.te(metaKey, store.getters.locale) ? i18n.global.t(metaKey) : titleKey
+  return i18n.global.te(metaKey, useAppStore().locale) ? i18n.global.t(metaKey) : titleKey
 }

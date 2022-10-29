@@ -65,12 +65,12 @@
 <script setup>
 import CustomScrollDrawer from '@/components/Drawer/CustomScrollDrawer.vue'
 import { defineComponent, ref, watch, computed } from 'vue'
-import { useStore } from 'vuex'
 import { tableDefaultData, tableDataFormat } from '@/utils/table'
 import { getPermissionGroupList, editPermissionGroup, addPermissionGroup, deletePermissionGroup } from '@/api/permissionGroup'
 import notice from '@/utils/notice'
 import TableAction from '@/components/Table/TableAction.vue'
 import { Refresh, Plus} from "@element-plus/icons-vue"
+import { usePermissionStore } from "@/store/permission"
 
 const props = defineProps({
   modelValue: false,
@@ -79,7 +79,7 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue"])
 
 const drawer = ref(props.modelValue)
-const store = useStore()
+const permissionStore = usePermissionStore()
 const table = tableDefaultData()
 const dialogVisible = ref(false)
 const formRef = ref(null)
@@ -153,9 +153,9 @@ const handleDelete = (index, row) => {
   })
 }
 
-const hasAddBtn = computed(() => store.getters.hasPermission("permission-group.store"))
-const hasEditBtn = computed(() => store.getters.hasPermission("permission-group.update"))
-const hasDeleteBtn = computed(() => store.getters.hasPermission("permission-group.destroy"))
+const hasAddBtn = computed(() => permissionStore.hasPermission("permission-group.store"))
+const hasEditBtn = computed(() => permissionStore.hasPermission("permission-group.update"))
+const hasDeleteBtn = computed(() => permissionStore.hasPermission("permission-group.destroy"))
 const rules = {
   name: [
     { required: true },

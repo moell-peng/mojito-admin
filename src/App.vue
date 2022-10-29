@@ -6,8 +6,10 @@
 
 <script setup>
 import { computed, onMounted, watch } from 'vue'
+import { useTagStore } from "@/store/tag"
+import { useBreadcrumbStore } from "@/store/breadcrumb"
+import { useAppStore } from "@/store/app"
 import { useRoute } from 'vue-router'
-import { useStore } from 'vuex'
 import config from '@/config'
 import { routeFormatTag } from '@/utils/helper'
 import zhCn from 'element-plus/lib/locale/lang/zh-cn'
@@ -15,29 +17,32 @@ import en from 'element-plus/lib/locale/lang/en'
 import { getLocale } from './utils/localforage'
 import { useI18n } from 'vue-i18n'
 
+const tagStore = useTagStore()
+const breadcrumbStore = useBreadcrumbStore()
+const appStore = useAppStore()
 const route = useRoute()
-const store = useStore()
+
 onMounted(() => {
-  store.commit('SET_BREADCRUMB', route.matched)
+  breadcrumbStore.setBreadcrumb(route.matched)
 })
 
 const i18n = useI18n()
 getLocale().then(lang => {
   if (lang) {
-    store.commit("SET_LOCALE", lang)
+    appStore.setLocale(lang)
     i18n.locale.value = lang
   }
 })
 
 watch(route, () => {
-  store.commit('SET_BREADCRUMB', route.matched)
+  breadcrumbStore.setBreadcrumb(route.matched)
   if (route.name !== config.loginRouteName) {
-    store.dispatch("openTagView", routeFormatTag(route))
+    tagStore.openTagView(routeFormatTag(route))
   }
 })
 
 const locale = computed(() => {
-  return store.getters.locale === 'zh-cn' ? zhCn : en
+  return appStore.locale === 'zh-cn' ? zhCn : en
 })
 
 </script>

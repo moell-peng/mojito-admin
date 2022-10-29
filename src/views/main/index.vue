@@ -21,17 +21,19 @@
 import MojitoHeader from "@/components/Layout/Header.vue"
 import NavBar from "@/components/Layout/NavBar.vue"
 import TagsView from "@/components/Layout/TagsView.vue"
-import { useStore } from 'vuex'
+import { usePermissionStore } from '@/store/permission'
+import { useTagStore } from '@/store/tag'
 import { ref, computed } from 'vue'
 
-const store = useStore()
+const permissionStore = usePermissionStore()
+const tagStore = useTagStore()
 
-store.dispatch('loadPermissions')
+permissionStore.loadPermissions()
 
 let isCollapse = ref(false)
 
 const cacheTags = computed(() => {
-  return store.getters.cacheTags
+  return tagStore.cacheTags
 })
 
 const changeMenuStatus = (status) => {

@@ -103,13 +103,13 @@ import GuardSelect from '@/components/Select/GuardSelect.vue'
 import TableAction from '@/components/Table/TableAction.vue'
 import { tableDataFormat, tableDefaultData } from '@/utils/table'
 import { ref, computed } from 'vue'
-import { useStore } from 'vuex'
 import notice from '@/utils/notice'
 import RoleAssignPermissionDrawer from './RoleAssignPermissionDrawer.vue'
 import { Plus, Search} from '@element-plus/icons-vue'
+import { usePermissionStore } from "@/store/permission"
 
 const table = tableDefaultData()
-const store = useStore()
+const permissionStore = usePermissionStore()
 
 const requestData = () => {
   table.loading = true
@@ -199,10 +199,10 @@ const showAssignPermissionDrawer = (row) => {
   assignPermissionRole.value.guardName = row.guard_name
 }
 
-const updatePermission = computed(() => store.getters.hasPermission('role.update'))
-const addPermission = computed(() => store.getters.hasPermission('role.store'))
-const deletePermission = computed(() => store.getters.hasPermission('role.destroy'))
-const assignPermission = computed(() => store.getters.hasPermission('role.assign-permissions'))
+const updatePermission = computed(() => permissionStore.hasPermission('role.update'))
+const addPermission = computed(() => permissionStore.hasPermission('role.store'))
+const deletePermission = computed(() => permissionStore.hasPermission('role.destroy'))
+const assignPermission = computed(() => permissionStore.hasPermission('role.assign-permissions'))
 const rules = {
   name: [
     { required: true },

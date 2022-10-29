@@ -1,6 +1,6 @@
 import http from '@/utils/http'
 
-export const loadPermissions = () => {
+export const loadUserPermissions = () => {
   return http.get('/api/permission-user-all')
 }
 

@@ -26,7 +26,7 @@
   <el-card style="margin:10px">
     <table-action :title="$t('meta.title.permission')">
       <template #action>
-        <el-button type="primary" v-if="hasPermissionGroup"  @click="permissionGroupdrawer = true">{{ $t('meta.title.permissionGroup') }}</el-button>
+        <el-button type="primary" v-if="hasPermissionGroup"  @click="permissionGroupDrawer = true">{{ $t('meta.title.permissionGroup') }}</el-button>
         <el-button type="primary" v-if="hasAddPermission" @click="handleAdd" :icon="Plus">{{ $t('add') }}</el-button>
       </template>
     </table-action>
@@ -83,7 +83,7 @@
     </el-pagination>
   </el-card>
   <permission-form-drawer :row="updateRow" :action="formAction" v-model="drawer"></permission-form-drawer>
-  <permission-group-drawer v-model="permissionGroupdrawer"></permission-group-drawer>
+  <permission-group-drawer v-model="permissionGroupDrawer"></permission-group-drawer>
 </template>
 
 <script setup>
@@ -91,18 +91,17 @@ import { deletePermission, getPermissionList } from '@/api/permission'
 import GuardSelect from '@/components/Select/GuardSelect.vue'
 import PermissionGroupSelect from "@/components/Select/PermissionGroupSelect.vue"
 import TableAction from '@/components/Table/TableAction.vue'
-import CustomScrollDrawer from '@/components/Drawer/CustomScrollDrawer.vue';
 import { ref, computed, watch } from 'vue'
 import PermissionFormDrawer from './PermissionFormDrawer.vue'
-import { useStore } from 'vuex'
 import PermissionGroupDrawer from './PermissionGroupDrawer.vue'
 import { tableDefaultData, tableDataFormat } from '@/utils/table'
 import notice from '@/utils/notice'
 import { Plus, Search } from '@element-plus/icons-vue'
+import { usePermissionStore } from "@/store/permission";
 
 const drawer = ref(false)
-const permissionGroupdrawer = ref(false)
-const store = useStore()
+const permissionGroupDrawer = ref(false)
+const permissionStore = usePermissionStore()
 const table = tableDefaultData()
 
 const requestData = () => {
@@ -140,8 +139,8 @@ watch(drawer, d => {
   }
 })
 
-const hasAddPermission = computed(() => store.getters.hasPermission("permission.store"))
-const hasUpdatePermission = computed(() => store.getters.hasPermission("permission.update"))
-const hasDeletePermission = computed(() => store.getters.hasPermission("permission.destroy"))
-const hasPermissionGroup = computed(() => store.getters.hasPermission("permission-group.index"))
+const hasAddPermission = computed(() => permissionStore.hasPermission("permission.store"))
+const hasUpdatePermission = computed(() => permissionStore.hasPermission("permission.update"))
+const hasDeletePermission = computed(() => permissionStore.hasPermission("permission.destroy"))
+const hasPermissionGroup = computed(() => permissionStore.hasPermission("permission-group.index"))
 </script>

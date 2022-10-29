@@ -23,12 +23,12 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import config from '@/config'
 import { changePassword } from '@/api/changePassword'
+import { useAuthStore } from "@/store/auth"
 
-const store = useStore()
+const store = useAuthStore()
 const router = useRouter()
 const form = ref({
   old_password: null,
@@ -72,7 +72,7 @@ const submitForm = () => {
 
     changePassword(form.value).then(() => {
       resetForm()
-      store.dispatch("logoutHandle").then(router.push({
+      permissionStore.logoutHandle().then(router.push({
         name: config.loginRouteName
       }))
     })
