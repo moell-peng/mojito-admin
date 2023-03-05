@@ -5,10 +5,11 @@ import { setHttpToken } from '@/utils/http'
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    'token': '',
+    token: '',
   }),
   actions: {
     setToken(token) {
+      console.log(token)
       this.token = token
       setHttpToken(this.token.token)
     },
@@ -18,7 +19,7 @@ export const useAuthStore = defineStore("auth", {
           .then(response => {
             const token = response.data.data
 
-            this.setToken({ token })
+            this.setToken(token)
 
             resolve(setToken(token))
           })

@@ -22,7 +22,7 @@ router.beforeEach((to, from, next) => {
         } else {
           const authStore = useAuthStore()
           if (!authStore.token) {
-            authStore.setToken({ token })
+            authStore.setToken(token)
           }
           resolve()
         }
