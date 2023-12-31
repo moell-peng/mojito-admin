@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import {Bell, Money, Sell, User, View} from "@element-plus/icons-vue"
+import {Money, Sell, User, View} from "@element-plus/icons-vue"
 </script>
 <style lang="scss" scoped>
 .data-cards {
