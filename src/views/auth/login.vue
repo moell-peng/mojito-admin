@@ -1,7 +1,7 @@
 <template>
   <div id="login">
     <el-form :model="form" status-icon :rules="rules" ref="loginForm" label-width="100px" class="login-container">
-      <h2>{{ title }}</h2>
+      <h2>{{ config.fullName }}</h2>
       <el-form-item :label="$t('username')" prop="username">
         <el-input  v-model="form.username" auto-complete="off"></el-input>
       </el-form-item>
