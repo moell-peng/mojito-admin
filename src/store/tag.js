@@ -44,7 +44,7 @@ export const useTagStore = defineStore("tag", {
       }
     },
     closeTagHandle (tagList) {
-      this.tagList.reverse().forEach( key => {
+      tagList.reverse().forEach( key => {
         this.tagList.splice(key, 1)
       })
     }
