@@ -1,5 +1,5 @@
 <template>
-  <el-select v-model="guard" clearable>
+  <el-select v-model="guard" clearable :placeholder="placeholder">
     <el-option v-for="item in items" :label="item.label" :value="item.value" :key="item.label"></el-option>
   </el-select>
 </template>
@@ -9,6 +9,9 @@ import { watch, ref } from 'vue'
 
 const props = defineProps({
   modelValue: {
+    type: String,
+  },
+  placeholder: {
     type: String,
   }
 })

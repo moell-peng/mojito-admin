@@ -1,0 +1,18 @@
+.custom-scroll-drawer .el-drawer__body {
+  height: calc(100% - 80px);
+  padding: 0;
+}
+.pagination-right {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end
+}
+
+.search {
+  display: flex;
+  flex-wrap: wrap;
+  .search-item {
+    margin-right: 10px;
+    margin-bottom: 5px;
+  }
+}

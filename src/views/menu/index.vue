@@ -1,16 +1,14 @@
 <template>
   <el-card style="margin:10px;">
     <el-form :inline="false" :model="table.queryParams">
-      <el-row :gutter="40"> 
-        <el-col :span="8">
-          <el-form-item :label="$t('guardName')">
-            <guard-select v-model="table.queryParams.guard_name"></guard-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8" :offset="8" style="text-align:right">
+      <div class="search">
+        <div class="search-item">
+          <guard-select v-model="table.queryParams.guard_name" :placeholder="$t('guardName')"></guard-select>
+        </div>
+        <div class="search-item">
           <el-button type="primary" @click="requestData">{{ $t('search') }}</el-button>
-        </el-col>
-      </el-row>
+        </div>
+      </div>
     </el-form>
   </el-card>
   <el-card style="margin:10px;">

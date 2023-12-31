@@ -4,8 +4,7 @@
       v-model="drawer"
       custom-class="custom-scroll-drawer"
       :direction="direction"
-      :size="size"
-      destroy-on-close>
+      :size="drawerSize">
     <div :class="contentClass">
       <el-scrollbar>
         <div :style="paddingStyle">
@@ -19,7 +18,7 @@
   </el-drawer>
 </template>
 <script setup>
-import { watch, ref } from 'vue'
+import {watch, ref, computed} from 'vue'
 
 const props = defineProps({
   modelValue: {
@@ -51,6 +50,10 @@ const emit = defineEmits(['update:modelValue'])
 
 const drawer = ref(false)
 
+const drawerSize = computed(() => {
+  return /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "100%" : props.size
+})
+
 watch(() => props.modelValue, (v) => {
   drawer.value = v
 })
@@ -75,11 +78,11 @@ const paddingStyle = `padding:${props.padding}`
 }
 .footer {
   height:60px;
-  width: calc(100% - 40px);
+  width: 100%;
   position: absolute;
   line-height:60px;
+  padding-left: 20px;
   bottom: 0;
-  text-align: right;
   border-top: 1px solid #ebeef5;
 }
 </style>

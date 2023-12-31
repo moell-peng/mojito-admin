@@ -1,16 +1,14 @@
 <template>
   <el-card style="margin:10px">
     <el-form :inline="false" :model="table.queryParams">
-      <el-row :gutter="40">
-        <el-col :span="8">
-          <el-form-item :label="$t('name')">
-            <el-input v-model="table.queryParams.name" clearable></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8" :offset="8" style="text-align:right">
-         <el-button type="primary" @click="requestData" :icon="Search">{{ $t('search') }}</el-button>
-        </el-col>
-      </el-row>
+      <div class="search">
+        <div class="search-item">
+          <el-input v-model="table.queryParams.name" :placeholder="$t('name')" clearable></el-input>
+        </div>
+        <div class="search-item">
+          <el-button type="primary" @click="requestData">{{ $t('search') }}</el-button>
+        </div>
+      </div>
     </el-form>
   </el-card>
   <el-card style="margin:10px">
