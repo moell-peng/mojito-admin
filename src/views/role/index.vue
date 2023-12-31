@@ -95,7 +95,7 @@
   <role-assign-permission-drawer v-model="assignPermisionDrawer" :role-id="assignPermissionRole.id" :guard-name="assignPermissionRole.guardName"></role-assign-permission-drawer>
 </template>
 
-<script setup>
+<script setup name="roleIndex">
 import { getRoleList, addRole, editRole, deleteRole } from '@/api/role'
 import GuardSelect from '@/components/Select/GuardSelect.vue'
 import TableAction from '@/components/Table/TableAction.vue'

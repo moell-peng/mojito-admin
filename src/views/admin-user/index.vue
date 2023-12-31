@@ -85,7 +85,7 @@
   <admin-user-form-dialog :title="$t('edit')" :row="updateRow" action="edit" v-model="editDialogVisible"></admin-user-form-dialog>
 </template>
 
-<script setup>
+<script setup name="adminUserIndex">
 import { getAdminUserList, deleteAdminUser } from '@/api/adminUser'
 import UserAssignRole from '@/components/User/AssignRole.vue'
 import TableAction from '@/components/Table/TableAction.vue'

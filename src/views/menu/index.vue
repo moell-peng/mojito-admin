@@ -71,7 +71,7 @@
   <menu-form-drawer :row="updateRow" v-model="showFormDrawer" :action="formAction"></menu-form-drawer>
 </template>
 
-<script setup>
+<script setup name="menuIndex">
 import GuardSelect from '@/components/Select/GuardSelect.vue'
 import { getMenuList, deleteMenu } from '@/api/menu'
 import TableAction from '@/components/Table/TableAction.vue'

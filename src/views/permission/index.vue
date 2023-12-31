@@ -80,7 +80,7 @@
   <permission-group-drawer v-model="permissionGroupDrawer"></permission-group-drawer>
 </template>
 
-<script setup>
+<script setup name="permissionIndex">
 import { deletePermission, getPermissionList } from '@/api/permission'
 import GuardSelect from '@/components/Select/GuardSelect.vue'
 import PermissionGroupSelect from "@/components/Select/PermissionGroupSelect.vue"
