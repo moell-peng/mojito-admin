@@ -1,4 +1,5 @@
 import axios  from 'axios'
+import { getActivePinia } from 'pinia'
 import router from '@/router'
 import { ElMessage } from 'element-plus'
 import config from '@/config'
@@ -10,16 +11,16 @@ const httpRequest = axios.create({
 
 httpRequest.interceptors.request.use(
   config => {
+    const token = getActivePinia()?.state.value?.auth?.token?.token
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
     return config
   },
   error => {
     return Promise.reject(error)
   }
 )
-
-export function setHttpToken(token) {
-  httpRequest.defaults.headers.common.Authorization = `Bearer ${token}`
-}
 
 httpRequest.interceptors.response.use(
   response => {

@@ -14,7 +14,6 @@ import config from '@/config'
 import { routeFormatTag } from '@/utils/helper'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import en from 'element-plus/es/locale/lang/en'
-import { getLocale } from './utils/localforage'
 import { useI18n } from 'vue-i18n'
 
 const tagStore = useTagStore()
@@ -27,12 +26,9 @@ onMounted(() => {
 })
 
 const i18n = useI18n()
-getLocale().then(lang => {
-  if (lang) {
-    appStore.setLocale(lang)
-    i18n.locale.value = lang
-  }
-})
+watch(() => appStore.locale, (newLocale) => {
+  i18n.locale.value = newLocale
+}, { immediate: true })
 
 watch(route, () => {
   breadcrumbStore.setBreadcrumb(route.matched)

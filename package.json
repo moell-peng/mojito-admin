@@ -10,8 +10,8 @@
     "@element-plus/icons-vue": "^2.3.2",
     "axios": "^1.15.0",
     "element-plus": "^2.13.7",
-    "localforage": "^1.10.0",
     "pinia": "^3.0.4",
+    "pinia-plugin-persistedstate": "^4.7.1",
     "vue": "^3.5.32",
     "vue-i18n": "^11.3.2",
     "vue-router": "^5.0.4"

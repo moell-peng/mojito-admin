@@ -13,6 +13,11 @@ export default [
     }
   },
   {
+    url: '/api/auth/logout',
+    method: 'post',
+    statusCode: 204,
+  },
+  {
     url: 'api/user-change-password',
     method: 'patch',
     statusCode: 204,

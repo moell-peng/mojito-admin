@@ -57,7 +57,6 @@ import config from '@/config'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from "@/store/auth"
 import { useI18n } from 'vue-i18n'
-import { setLocale } from '@/utils/localforage'
 import { getTagTitleName } from '@/utils/helper'
 import { Fold, Expand, Avatar, ArrowDown } from "@element-plus/icons-vue"
 import { useAppStore } from "@/store/app"
@@ -88,7 +87,6 @@ const i18n = useI18n()
 const changeLang = (lang) => {
   appStore.setLocale(lang)
   i18n.locale.value = lang
-  setLocale(lang)
 }
 
 const showAuthorGitHubUrl = config.showAuthorGitHubUrl

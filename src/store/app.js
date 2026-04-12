@@ -5,6 +5,9 @@ export const useAppStore = defineStore("app", {
   state: () => ({
     locale: config.locale,
   }),
+  persist: {
+    key: `locale:${config.guard}`,
+  },
   actions: {
     setLocale (locale) {
       this.locale = locale

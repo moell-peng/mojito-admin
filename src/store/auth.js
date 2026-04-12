@@ -1,41 +1,26 @@
 import { login, logout } from '@/api/auth'
-import { removeToken, setToken } from '@/utils/localforage'
 import { defineStore } from "pinia"
-import { setHttpToken } from '@/utils/http'
+import config from '@/config'
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    token: '',
+    token: null,
   }),
+  persist: {
+    key: `token:${config.guard}`,
+  },
   actions: {
     setToken(token) {
-      console.log(token)
       this.token = token
-      setHttpToken(this.token.token)
     },
-    loginHandle (data) {
-      return new Promise((resolve, reject) => {
-        return login(data)
-          .then(response => {
-            const token = response.data.data
-
-            this.setToken(token)
-
-            resolve(setToken(token))
-          })
-          .catch(error => {
-            reject(error)
-          })
+    loginHandle(data) {
+      return login(data).then(response => {
+        this.setToken(response.data.data)
       })
     },
-
-    logoutHandle () {
-      return new Promise((resolve, reject) => {
-        return logout().then( () => {
-          removeToken()
-        }).catch( error => {
-          reject(error)
-        })
+    logoutHandle() {
+      return logout().then(() => {
+        this.token = null
       })
     }
   }
