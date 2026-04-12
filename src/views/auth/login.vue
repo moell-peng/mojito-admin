@@ -1,26 +1,28 @@
 <template>
   <div id="login">
-    <el-form :model="form" status-icon :rules="rules" ref="loginForm" label-width="100px" class="login-container">
-      <h2>{{ config.fullName }}</h2>
-      <el-form-item :label="$t('username')" prop="username">
-        <el-input  v-model="form.username" auto-complete="off"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('password')" prop="password">
-        <el-input type="Password" v-model="form.password" auto-complete="off"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('captcha')" prop="captcha">
-        <div class="captcha-code">
-          <el-input v-model="form.captcha"></el-input>
-        </div>
-        <div class="captcha-img" @click="refreshCaptcha">
-          <img :src="captcha.imageContent" style="height:30px"/>
-        </div>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" plain @click="submitForm()">{{ $t('submit') }}</el-button>
-        <el-button plain @click="resetForm()">{{ $t("reset") }}</el-button>
-      </el-form-item>
-    </el-form>
+    <div class="login-wrapper">
+      <h2 class="login-title">{{ config.fullName }}</h2>
+      <el-card shadow="always" class="login-card">
+        <el-form :model="form" status-icon :rules="rules" ref="loginForm" label-width="0">
+          <el-form-item prop="username">
+            <el-input v-model="form.username" placeholder="请输入您的用户名" auto-complete="off" />
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input type="password" v-model="form.password" placeholder="请输入您的密码" auto-complete="off" />
+          </el-form-item>
+          <el-form-item prop="captcha">
+            <div class="captcha-row">
+              <el-input v-model="form.captcha" :placeholder="$t('captcha')" />
+              <img :src="captcha.imageContent" class="captcha-img" @click="refreshCaptcha" />
+            </div>
+          </el-form-item>
+          <el-form-item class="btn-row">
+            <el-button type="primary" plain @click="submitForm()">{{ $t('submit') }}</el-button>
+            <el-button plain type="danger" @click="resetForm()">{{ $t('reset') }}</el-button>
+          </el-form-item>
+        </el-form>
+      </el-card>
+    </div>
   </div>
 </template>
 <script setup>
@@ -93,35 +95,71 @@ const resetForm = () => {
 }
 </script>
 <style lang="scss" scoped>
-  h2 {
-    text-align: center;
-    color: #42b983;
-  }
-  #login {
-    height:100%;
-  }
-  .login-container {
-    width: 350px;
-    padding: 20px;
-    background: #fff;
-    position: absolute;
-    top:50%;
-    left:50%;
-    margin-top:-200px;
-    margin-left:-195px;
-    border: 1px solid #eaeaea;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    .captcha-code {
-      flex: 1;
+#login {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .login-wrapper {
+    margin-top: -200px;
+    max-width: 380px;
+
+    .login-title {
+      text-align: center;
+      color: #42b983;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 24px;
     }
-    .captcha-img {
-      width:112px;
-      margin-left:5px;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
+
+    .login-card {
+      border-radius: 8px;
+      overflow: hidden;
+
+      :deep(.el-card__body) {
+        padding: 30px 24px;
+      }
+
+      :deep(.el-form-item) {
+        margin-bottom: 25px;
+      }
+
+      :deep(.el-form-item:last-child) {
+        margin-bottom: 0;
+      }
+
+      .captcha-row {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        gap: 8px;
+
+        .el-input {
+          flex: 1;
+        }
+
+        .captcha-img {
+          width: 112px;
+          height: 32px;
+          object-fit: cover;
+          cursor: pointer;
+          border-radius: 4px;
+        }
+      }
+
+      .btn-row {
+        :deep(.el-form-item__content) {
+          display: flex;
+          gap: 12px;
+        }
+
+        .el-button {
+          flex: 1;
+          margin: 0;
+        }
+      }
     }
   }
+}
 </style>
