@@ -11,56 +11,45 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from) => {
   if (config.loginRouteName === to.name) {
-    next()
-  } else {
-    let login = new Promise((resolve, reject) => {
-      getToken().then( token => {
-        if (!token || !token.hasOwnProperty('token')) {
-          reject({ name : config.loginRouteName})
-        } else {
-          const authStore = useAuthStore()
-          if (!authStore.token) {
-            authStore.setToken(token)
-          }
-          resolve()
-        }
-      }).catch(error => {
-        reject(error)
-      })
-    })
-
-    let permission = new Promise((resolve, reject) => {
-      if (!to.meta.permission) {
-        resolve()
-      } else {
-        getPermissions().then( permissions => {
-          if (permissions.indexOf(to.meta.permission) < 0) {
-            reject(`You do not have permission to access ${to.meta.permission}`)
-          }
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      }
-    })
-
-    Promise.all([login, permission]).then( result => {
-      next()
-    }).catch( error => {
-      let varType = typeof error;
-      if (varType === 'object') {
-        next({name: error.name})
-      } else {
-        ElMessage({
-          message: error,
-          type: 'error'
-        })
-        next({name: from.name})
-      }
-    })
+    return true
   }
+
+  let token
+  try {
+    token = await getToken()
+  } catch (error) {
+    return { name: config.loginRouteName }
+  }
+
+  if (!token || !Object.prototype.hasOwnProperty.call(token, 'token')) {
+    return { name: config.loginRouteName }
+  }
+
+  const authStore = useAuthStore()
+  if (!authStore.token) {
+    authStore.setToken(token)
+  }
+
+  if (to.meta.permission) {
+    let permissions
+    try {
+      permissions = await getPermissions()
+    } catch (error) {
+      return { name: from.name }
+    }
+
+    if (permissions.indexOf(to.meta.permission) < 0) {
+      ElMessage({
+        message: `You do not have permission to access ${to.meta.permission}`,
+        type: 'error'
+      })
+      return { name: from.name }
+    }
+  }
+
+  return true
 })
 
 export default router

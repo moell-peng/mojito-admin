@@ -7,26 +7,27 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "@element-plus/icons-vue": "^0.2.7",
-    "axios": "^0.21.1",
-    "element-plus": "^2.2.17",
-    "localforage": "^1.9.0",
-    "pinia": "^2.0.23",
-    "vue": "^3.0.5",
-    "vue-i18n": "^9.1.7",
-    "vue-router": "4"
+    "@element-plus/icons-vue": "^2.3.2",
+    "axios": "^1.15.0",
+    "element-plus": "^2.13.7",
+    "localforage": "^1.10.0",
+    "pinia": "^3.0.4",
+    "vue": "^3.5.32",
+    "vue-i18n": "^11.3.2",
+    "vue-router": "^5.0.4"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.163",
-    "@vitejs/plugin-vue": "^1.1.5",
-    "@vue/compiler-sfc": "^3.0.5",
+    "@iconify/json": "^2.2.461",
+    "@vitejs/plugin-vue": "^6.0.5",
+    "@vue/compiler-sfc": "^3.5.32",
+    "esbuild": "^0.28.0",
     "mockjs": "^1.1.0",
-    "sass": "^1.30.0",
-    "unplugin-auto-import": "^0.5.11",
-    "unplugin-icons": "^0.18.1",
-    "unplugin-vue-components": "^0.17.18",
-    "vite": "^3.1.7",
-    "vite-plugin-mock": "^2.9.4",
+    "sass": "^1.99.0",
+    "unplugin-auto-import": "^21.0.0",
+    "unplugin-icons": "^23.0.1",
+    "unplugin-vue-components": "^32.0.0",
+    "vite": "^8.0.8",
+    "vite-plugin-mock": "^3.0.2",
     "vite-plugin-vue-setup-extend": "^0.4.0"
   }
 }

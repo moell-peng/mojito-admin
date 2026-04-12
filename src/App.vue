@@ -12,8 +12,8 @@ import { useAppStore } from "@/store/app"
 import { useRoute } from 'vue-router'
 import config from '@/config'
 import { routeFormatTag } from '@/utils/helper'
-import zhCn from 'element-plus/lib/locale/lang/zh-cn'
-import en from 'element-plus/lib/locale/lang/en'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
+import en from 'element-plus/es/locale/lang/en'
 import { getLocale } from './utils/localforage'
 import { useI18n } from 'vue-i18n'
 
