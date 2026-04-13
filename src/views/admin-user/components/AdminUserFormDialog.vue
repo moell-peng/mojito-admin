@@ -26,6 +26,8 @@ import { addAdminUser, editAdminUser } from '@/api/adminUser'
 import notice from '@/utils/notice'
 import { ref, computed, nextTick } from 'vue'
 
+const emit = defineEmits(['success'])
+
 const visible = ref(false)
 const actionType = ref('add')
 let currentRow = null
@@ -88,6 +90,7 @@ const handleAddAdminUser = () => {
       notice.addSuccess()
       visible.value = false
       formRef.value.resetFields()
+      emit('success')
     })
   })
 }
@@ -99,10 +102,10 @@ const handleUpdateAdminUser = () => {
     }
     editAdminUser(currentRow.id, form.value).then(() => {
       notice.editSuccess()
-      currentRow.name = form.value.name
-      currentRow.status = form.value.status
       form.value.password = null
       visible.value = false
+      formRef.value.resetFields()
+      emit('success')
     })
   })
 }

@@ -24,7 +24,7 @@ import { ref, nextTick } from 'vue'
 import { addRole, editRole } from '@/api/role'
 import notice from '@/utils/notice'
 
-const emit = defineEmits(['add-success'])
+const emit = defineEmits(['success'])
 
 const visible = ref(false)
 const actionType = ref('add')
@@ -72,7 +72,8 @@ const handleAddRole = () => {
     addRole(form.value).then(() => {
       notice.addSuccess()
       visible.value = false
-      emit('add-success')
+      formRef.value.resetFields()
+      emit('success')
     })
   })
 }
@@ -84,8 +85,9 @@ const handleEditRole = () => {
     }
     editRole(currentRow.id, form.value).then(() => {
       notice.editSuccess()
-      Object.assign(currentRow, form.value)
       visible.value = false
+      formRef.value.resetFields()
+      emit('success')
     })
   })
 }

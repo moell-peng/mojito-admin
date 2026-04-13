@@ -116,9 +116,9 @@ const updatePermissionGroup = () => {
     }
 
     editPermissionGroup(updateRow.value.id, form.value).then( () => {
-      updateRow.value.name = form.value.name
       notice.editSuccess()
       dialogVisible.value = false
+      requestData()
     })
   })
 }
@@ -131,6 +131,7 @@ const storePermissionGroup = () => {
     addPermissionGroup(form.value).then(() => {
       notice.addSuccess()
       dialogVisible.value = false
+      requestData()
     })
   })
 }

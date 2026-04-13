@@ -81,7 +81,7 @@
     </el-pagination>
   </el-card>
   <user-assign-role ref="userAssignRoleRef"></user-assign-role>
-  <admin-user-form-dialog ref="adminUserFormDialogRef"></admin-user-form-dialog>
+  <admin-user-form-dialog ref="adminUserFormDialogRef" @success="requestData"></admin-user-form-dialog>
 </template>
 
 <script setup name="adminUserIndex">
@@ -89,7 +89,7 @@ import { getAdminUserList, deleteAdminUser } from '@/api/adminUser'
 import UserAssignRole from '@/components/User/AssignRole.vue'
 import TableAction from '@/components/Table/TableAction.vue'
 import { ref, computed } from 'vue'
-import AdminUserFormDialog from './AdminUserFormDialog.vue'
+import AdminUserFormDialog from './components/AdminUserFormDialog.vue'
 import { tableDataFormat, tableDefaultData } from '@/utils/table'
 import notice from '@/utils/notice'
 import {usePermissionStore} from "@/store/permission";

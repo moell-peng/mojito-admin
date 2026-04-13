@@ -76,7 +76,7 @@
                    :total="table.pagination.total">
     </el-pagination>
   </el-card>
-  <permission-form-drawer ref="permissionFormDrawerRef"></permission-form-drawer>
+  <permission-form-drawer ref="permissionFormDrawerRef" @success="requestData"></permission-form-drawer>
   <permission-group-drawer ref="permissionGroupDrawerRef"></permission-group-drawer>
 </template>
 
@@ -86,8 +86,8 @@ import GuardSelect from '@/components/Select/GuardSelect.vue'
 import PermissionGroupSelect from "@/components/Select/PermissionGroupSelect.vue"
 import TableAction from '@/components/Table/TableAction.vue'
 import { ref, computed } from 'vue'
-import PermissionFormDrawer from './PermissionFormDrawer.vue'
-import PermissionGroupDrawer from './PermissionGroupDrawer.vue'
+import PermissionFormDrawer from './components/PermissionFormDrawer.vue'
+import PermissionGroupDrawer from './components/PermissionGroupDrawer.vue'
 import { tableDefaultData, tableDataFormat } from '@/utils/table'
 import notice from '@/utils/notice'
 import { Plus, Search } from '@element-plus/icons-vue'

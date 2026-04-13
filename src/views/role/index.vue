@@ -74,7 +74,7 @@
                    :total="table.pagination.total">
     </el-pagination>
   </el-card>
-  <role-form-dialog ref="roleFormDialogRef" @add-success="requestData"></role-form-dialog>
+  <role-form-dialog ref="roleFormDialogRef" @success="requestData"></role-form-dialog>
   <role-assign-permission-drawer ref="roleAssignPermissionDrawerRef"></role-assign-permission-drawer>
 </template>
 
@@ -85,8 +85,8 @@ import TableAction from '@/components/Table/TableAction.vue'
 import { tableDataFormat, tableDefaultData } from '@/utils/table'
 import { ref, computed } from 'vue'
 import notice from '@/utils/notice'
-import RoleFormDialog from './RoleFormDialog.vue'
-import RoleAssignPermissionDrawer from './RoleAssignPermissionDrawer.vue'
+import RoleFormDialog from './components/RoleFormDialog.vue'
+import RoleAssignPermissionDrawer from './components/RoleAssignPermissionDrawer.vue'
 import { Plus } from '@element-plus/icons-vue'
 import { usePermissionStore } from "@/store/permission"
 

@@ -68,14 +68,14 @@
       </el-table-column>
     </el-table>
   </el-card>
-  <menu-form-drawer ref="menuFormDrawerRef"></menu-form-drawer>
+  <menu-form-drawer ref="menuFormDrawerRef" @success="requestData"></menu-form-drawer>
 </template>
 
 <script setup name="menuIndex">
 import GuardSelect from '@/components/Select/GuardSelect.vue'
 import { getMenuList, deleteMenu } from '@/api/menu'
 import TableAction from '@/components/Table/TableAction.vue'
-import MenuFormDrawer from './MenuFormDrawer.vue'
+import MenuFormDrawer from './components/MenuFormDrawer.vue'
 import { ref, computed } from 'vue'
 import { tableDefaultData } from '@/utils/table'
 import notice from '@/utils/notice'
