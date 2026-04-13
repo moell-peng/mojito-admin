@@ -29,7 +29,10 @@ export default defineConfig(({ command }) => {
       }),
       vueSetupExtend(),
       Icons(),
-    ]
+    ],
+    server: {
+      host: '0.0.0.0'
+    }
   }
 })
 
