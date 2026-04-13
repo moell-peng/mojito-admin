@@ -35,13 +35,16 @@ export function tableDataFormat(response, table) {
   table.data = response.data.data
 
   let meta = response.data.meta
-  table.pagination = {
-    currentPage: meta.current_page,
-    pageSize: meta.per_page,
-    total: meta.total,
-    from: meta.from,
-    lastPage: meta.last_page,
-    to: meta.to
+
+  if (meta) {
+    table.pagination = {
+      currentPage: meta.current_page,
+      pageSize: meta.per_page,
+      total: meta.total,
+      from: meta.from,
+      lastPage: meta.last_page,
+      to: meta.to
+    }
   }
 
   table.loading = false

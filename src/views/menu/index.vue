@@ -14,7 +14,7 @@
   <el-card style="margin:10px;">
     <table-action :title="$t('meta.title.menu')">
       <template #action>
-        <el-button type="primary" v-if="hasAddPermission"  @click="handleAdd">{{ $t('add') }}</el-button>
+        <el-button type="primary" v-permission="'menu.store'"  @click="handleAdd">{{ $t('add') }}</el-button>
       </template>
     </table-action>
     <el-table
@@ -55,11 +55,11 @@
               :label="$t('actions')">
         <template #default="scope">
           <el-button
-                  v-if="hasUpdatePermission"
+                  v-permission="'menu.update'"
                   type="primary"
                   :link="true"
                   @click="handleEdit(scope.row)">{{ $t('edit') }}</el-button>
-          <el-popconfirm v-if="hasDeletePermission" :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
+          <el-popconfirm v-permission="'menu.destroy'" :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
             <template #reference>
               <el-button type="danger" :link="true">{{ $t('delete') }}</el-button>
             </template>
@@ -79,10 +79,7 @@ import MenuFormDrawer from './components/MenuFormDrawer.vue'
 import { ref, computed } from 'vue'
 import { tableDefaultData } from '@/utils/table'
 import notice from '@/utils/notice'
-import { usePermissionStore } from "@/store/permission"
-
 const menuFormDrawerRef = ref(null)
-const permissionStore = usePermissionStore()
 const table = tableDefaultData()
 
 const requestData = () => {
@@ -110,9 +107,6 @@ const handleAdd = () => {
   menuFormDrawerRef.value.open('add')
 }
 
-const hasAddPermission = computed(() => permissionStore.hasPermission("menu.store"))
-const hasUpdatePermission = computed(() => permissionStore.hasPermission("menu.update"))
-const hasDeletePermission = computed(() => permissionStore.hasPermission("menu.destroy"))
 const icon = computed(() => (name) => name)
 
 </script>

@@ -2,7 +2,7 @@
   <custom-scroll-drawer :title="$t('meta.title.permissionGroup')" :full-content="true" v-model="visible" direction="rtl" :size="800">
     <table-action>
       <template #action>
-        <el-button type="primary" v-if="hasAddBtn" plain  @click="handleAdd" :icon="Plus"></el-button>
+        <el-button type="primary" v-permission="'permission-group.store'" plain  @click="handleAdd" :icon="Plus"></el-button>
         <el-button type="primary" plain  @click="requestData" :icon="Refresh"></el-button>
       </template>
     </table-action>
@@ -29,11 +29,11 @@
               :label="$t('actions')">
         <template #default="scope">
           <el-button
-                  v-if="hasEditBtn"
+                  v-permission="'permission-group.update'"
                   type="primary"
                   :link="true"
                   @click="handleEdit(scope.row)">{{ $t('edit') }}</el-button>
-          <el-popconfirm v-if="hasDeleteBtn" :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
+          <el-popconfirm v-permission="'permission-group.destroy'" :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
             <template #reference>
               <el-button type="danger" :link="true">{{ $t('delete') }}</el-button>
             </template>
@@ -64,16 +64,13 @@
 </template>
 <script setup>
 import CustomScrollDrawer from '@/components/Drawer/CustomScrollDrawer.vue'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { tableDefaultData, tableDataFormat } from '@/utils/table'
 import { getPermissionGroupList, editPermissionGroup, addPermissionGroup, deletePermissionGroup } from '@/api/permissionGroup'
 import notice from '@/utils/notice'
 import TableAction from '@/components/Table/TableAction.vue'
 import { Refresh, Plus} from "@element-plus/icons-vue"
-import { usePermissionStore } from "@/store/permission"
-
 const visible = ref(false)
-const permissionStore = usePermissionStore()
 const table = tableDefaultData()
 const dialogVisible = ref(false)
 const formRef = ref(null)
@@ -143,9 +140,6 @@ const handleDelete = (index, row) => {
   })
 }
 
-const hasAddBtn = computed(() => permissionStore.hasPermission("permission-group.store"))
-const hasEditBtn = computed(() => permissionStore.hasPermission("permission-group.update"))
-const hasDeleteBtn = computed(() => permissionStore.hasPermission("permission-group.destroy"))
 const rules = {
   name: [
     { required: true },

@@ -20,8 +20,8 @@
   <el-card style="margin:10px">
     <table-action :title="$t('meta.title.permission')">
       <template #action>
-        <el-button type="primary" v-if="hasPermissionGroup"  @click="permissionGroupDrawerRef.open()">{{ $t('meta.title.permissionGroup') }}</el-button>
-        <el-button type="primary" v-if="hasAddPermission" @click="handleAdd" :icon="Plus">{{ $t('add') }}</el-button>
+        <el-button type="primary" v-permission="'permission-group.index'"  @click="permissionGroupDrawerRef.open()">{{ $t('meta.title.permissionGroup') }}</el-button>
+        <el-button type="primary" v-permission="'permission.store'" @click="handleAdd" :icon="Plus">{{ $t('add') }}</el-button>
       </template>
     </table-action>
     <el-table
@@ -56,11 +56,11 @@
               >
         <template #default="scope">
           <el-button
-                  v-if="hasUpdatePermission"
+                  v-permission="'permission.update'"
                   type="primary"
                   :link="true"
                   @click="handleEdit(scope.row)">{{ $t('edit') }}</el-button>
-          <el-popconfirm v-if="hasDeletePermission" :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
+          <el-popconfirm v-permission="'permission.destroy'" :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
             <template #reference>
               <el-button  type="danger" :link="true">{{ $t('delete') }}</el-button>
             </template>
@@ -85,17 +85,14 @@ import { deletePermission, getPermissionList } from '@/api/permission'
 import GuardSelect from '@/components/Select/GuardSelect.vue'
 import PermissionGroupSelect from "@/components/Select/PermissionGroupSelect.vue"
 import TableAction from '@/components/Table/TableAction.vue'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import PermissionFormDrawer from './components/PermissionFormDrawer.vue'
 import PermissionGroupDrawer from './components/PermissionGroupDrawer.vue'
 import { tableDefaultData, tableDataFormat } from '@/utils/table'
 import notice from '@/utils/notice'
 import { Plus, Search } from '@element-plus/icons-vue'
-import { usePermissionStore } from "@/store/permission";
-
 const permissionFormDrawerRef = ref(null)
 const permissionGroupDrawerRef = ref(null)
-const permissionStore = usePermissionStore()
 const table = tableDefaultData()
 
 const requestData = () => {
@@ -122,8 +119,4 @@ const handleDelete = (index, row) => {
   })
 }
 
-const hasAddPermission = computed(() => permissionStore.hasPermission("permission.store"))
-const hasUpdatePermission = computed(() => permissionStore.hasPermission("permission.update"))
-const hasDeletePermission = computed(() => permissionStore.hasPermission("permission.destroy"))
-const hasPermissionGroup = computed(() => permissionStore.hasPermission("permission-group.index"))
 </script>

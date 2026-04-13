@@ -14,7 +14,7 @@
   <el-card style="margin:10px">
     <table-action :title="$t('meta.title.role')">
       <template #action>
-        <el-button type="primary" v-if="addPermission"  @click="roleFormDialogRef.open('add')" :icon="Plus">{{ $t('add') }}</el-button>
+        <el-button type="primary" v-permission="'role.store'"  @click="roleFormDialogRef.open('add')" :icon="Plus">{{ $t('add') }}</el-button>
       </template>
     </table-action>
     <el-table
@@ -49,16 +49,16 @@
               >
         <template #default="scope">
           <el-button
-                  v-if="updatePermission"
+                  v-permission="'role.update'"
                   type="primary"
                   :link="true"
                   @click="roleFormDialogRef.open('edit', scope.row)">{{ $t('edit') }}</el-button>
           <el-button
-                  v-if="assignPermission"
+                  v-permission="'role.assign-permissions'"
                   @click="roleAssignPermissionDrawerRef.open(scope.row.id, scope.row.guard_name)"
                   type="primary"
                   :link="true">{{ $t('assignPermission') }}</el-button>
-          <el-popconfirm v-if="deletePermission" :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
+          <el-popconfirm v-permission="'role.destroy'" :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
             <template #reference>
               <el-button type="danger" :link="true">{{ $t('delete') }}</el-button>
             </template>
@@ -83,15 +83,12 @@ import { getRoleList, deleteRole } from '@/api/role'
 import GuardSelect from '@/components/Select/GuardSelect.vue'
 import TableAction from '@/components/Table/TableAction.vue'
 import { tableDataFormat, tableDefaultData } from '@/utils/table'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import notice from '@/utils/notice'
 import RoleFormDialog from './components/RoleFormDialog.vue'
 import RoleAssignPermissionDrawer from './components/RoleAssignPermissionDrawer.vue'
 import { Plus } from '@element-plus/icons-vue'
-import { usePermissionStore } from "@/store/permission"
-
 const table = tableDefaultData()
-const permissionStore = usePermissionStore()
 const roleFormDialogRef = ref(null)
 const roleAssignPermissionDrawerRef = ref(null)
 
@@ -111,8 +108,4 @@ const handleDelete = (index, row) => {
   })
 }
 
-const updatePermission = computed(() => permissionStore.hasPermission('role.update'))
-const addPermission = computed(() => permissionStore.hasPermission('role.store'))
-const deletePermission = computed(() => permissionStore.hasPermission('role.destroy'))
-const assignPermission = computed(() => permissionStore.hasPermission('role.assign-permissions'))
 </script>

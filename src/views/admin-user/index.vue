@@ -17,7 +17,7 @@
   <el-card style="margin:10px;">
     <table-action :title="$t('meta.title.adminUser')">
       <template #action>
-        <el-button type="primary" v-if="hasAddPermission"  @click="adminUserFormDialogRef.open('add')">{{ $t('add') }}</el-button>
+        <el-button type="primary" v-permission="'admin-user.store'"  @click="adminUserFormDialogRef.open('add')">{{ $t('add') }}</el-button>
       </template>
     </table-action>
     <el-table
@@ -55,16 +55,16 @@
               >
         <template #default="scope">
           <el-button
-                  v-if="hasEditPermission"
+                  v-permission="'admin-user.update'"
                   type="primary"
                   :link="true"
                   @click="handleEdit(scope.row)">{{ $t('edit') }}</el-button>
           <el-button
-                  v-if="hasAssignRolePermission"
+                  v-permission="'admin-user.assign-roles'"
                   type="primary"
                   :link="true"
                   @click="handleAssignRole(scope.row)">{{ $t('assignRole') }}</el-button>
-          <el-popconfirm v-if="hasDeletePermission" :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
+          <el-popconfirm v-permission="'admin-user.destroy'" :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
             <template #reference>
               <el-button type="danger" :link="true">{{ $t('delete') }}</el-button>
             </template>
@@ -88,13 +88,10 @@
 import { getAdminUserList, deleteAdminUser } from '@/api/adminUser'
 import UserAssignRole from '@/components/User/AssignRole.vue'
 import TableAction from '@/components/Table/TableAction.vue'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import AdminUserFormDialog from './components/AdminUserFormDialog.vue'
 import { tableDataFormat, tableDefaultData } from '@/utils/table'
 import notice from '@/utils/notice'
-import {usePermissionStore} from "@/store/permission";
-
-const permissionStore = usePermissionStore()
 const adminUserFormDialogRef = ref(null)
 const userAssignRoleRef = ref(null)
 const table = tableDefaultData()
@@ -123,9 +120,5 @@ const handleAssignRole = (row) => {
   userAssignRoleRef.value.open(row.id, 'admin')
 }
 
-const hasAddPermission = computed(() => permissionStore.hasPermission("admin-user.store"))
-const hasEditPermission = computed(() => permissionStore.hasPermission("admin-user.update"))
-const hasDeletePermission = computed(() => permissionStore.hasPermission("admin-user.destroy"))
-const hasAssignRolePermission = computed(() => permissionStore.hasPermission("admin-user.assign-roles"))
 
 </script>

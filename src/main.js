@@ -5,6 +5,7 @@ import i18n from '@/lang/index'
 import router from '@/router'
 import App from './App.vue'
 import * as Icons from '@element-plus/icons-vue'
+import { permission } from '@/directives/permission'
 import '@/assets/css/index.scss'
 import 'element-plus/theme-chalk/el-message.css'
 import 'element-plus/theme-chalk/el-notification.css'
@@ -20,6 +21,8 @@ for (const iconName in Icons) {
     app.component(iconName, Icons[iconName])
   }
 }
+
+app.directive('permission', permission)
 
 app.mount('#app')
 
