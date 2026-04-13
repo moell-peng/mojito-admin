@@ -20,7 +20,7 @@
   <el-card style="margin:10px">
     <table-action :title="$t('meta.title.permission')">
       <template #action>
-        <el-button type="primary" v-if="hasPermissionGroup"  @click="permissionGroupDrawer = true">{{ $t('meta.title.permissionGroup') }}</el-button>
+        <el-button type="primary" v-if="hasPermissionGroup"  @click="permissionGroupDrawerRef.open()">{{ $t('meta.title.permissionGroup') }}</el-button>
         <el-button type="primary" v-if="hasAddPermission" @click="handleAdd" :icon="Plus">{{ $t('add') }}</el-button>
       </template>
     </table-action>
@@ -76,8 +76,8 @@
                    :total="table.pagination.total">
     </el-pagination>
   </el-card>
-  <permission-form-drawer :row="updateRow" :action="formAction" v-model="drawer"></permission-form-drawer>
-  <permission-group-drawer v-model="permissionGroupDrawer"></permission-group-drawer>
+  <permission-form-drawer ref="permissionFormDrawerRef"></permission-form-drawer>
+  <permission-group-drawer ref="permissionGroupDrawerRef"></permission-group-drawer>
 </template>
 
 <script setup name="permissionIndex">
@@ -85,7 +85,7 @@ import { deletePermission, getPermissionList } from '@/api/permission'
 import GuardSelect from '@/components/Select/GuardSelect.vue'
 import PermissionGroupSelect from "@/components/Select/PermissionGroupSelect.vue"
 import TableAction from '@/components/Table/TableAction.vue'
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import PermissionFormDrawer from './PermissionFormDrawer.vue'
 import PermissionGroupDrawer from './PermissionGroupDrawer.vue'
 import { tableDefaultData, tableDataFormat } from '@/utils/table'
@@ -93,8 +93,8 @@ import notice from '@/utils/notice'
 import { Plus, Search } from '@element-plus/icons-vue'
 import { usePermissionStore } from "@/store/permission";
 
-const drawer = ref(false)
-const permissionGroupDrawer = ref(false)
+const permissionFormDrawerRef = ref(null)
+const permissionGroupDrawerRef = ref(null)
 const permissionStore = usePermissionStore()
 const table = tableDefaultData()
 
@@ -107,17 +107,12 @@ const requestData = () => {
 
 requestData()
 
-const formAction = ref('add')
 const handleAdd = () => {
-  formAction.value = 'add'
-  drawer.value = true
+  permissionFormDrawerRef.value.open('add')
 }
 
-const updateRow = ref({})
 const handleEdit = (row) => {
-  updateRow.value = row
-  drawer.value = true
-  formAction.value = 'edit'
+  permissionFormDrawerRef.value.open('edit', row)
 }
 
 const handleDelete = (index, row) => {
@@ -126,12 +121,6 @@ const handleDelete = (index, row) => {
     table.data.splice(index, 1)
   })
 }
-
-watch(drawer, d => {
-  if (!d) {
-    updateRow.value = {}
-  }
-})
 
 const hasAddPermission = computed(() => permissionStore.hasPermission("permission.store"))
 const hasUpdatePermission = computed(() => permissionStore.hasPermission("permission.update"))

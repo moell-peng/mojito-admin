@@ -1,7 +1,7 @@
 <template>
-  <custom-scroll-drawer :title="$t('meta.title.permissionGroup')" :full-content="true" v-model="drawer" direction="rtl" :size="800">
+  <custom-scroll-drawer :title="$t('meta.title.permissionGroup')" :full-content="true" v-model="visible" direction="rtl" :size="800">
     <table-action>
-      <template #action> 
+      <template #action>
         <el-button type="primary" v-if="hasAddBtn" plain  @click="handleAdd" :icon="Plus"></el-button>
         <el-button type="primary" plain  @click="requestData" :icon="Refresh"></el-button>
       </template>
@@ -10,7 +10,7 @@
             :data="table.data"
             v-loading="table.loading"
             border
-           
+
             style="width: 100%">
       <el-table-column
               prop="name"
@@ -64,7 +64,7 @@
 </template>
 <script setup>
 import CustomScrollDrawer from '@/components/Drawer/CustomScrollDrawer.vue'
-import { defineComponent, ref, watch, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { tableDefaultData, tableDataFormat } from '@/utils/table'
 import { getPermissionGroupList, editPermissionGroup, addPermissionGroup, deletePermissionGroup } from '@/api/permissionGroup'
 import notice from '@/utils/notice'
@@ -72,13 +72,7 @@ import TableAction from '@/components/Table/TableAction.vue'
 import { Refresh, Plus} from "@element-plus/icons-vue"
 import { usePermissionStore } from "@/store/permission"
 
-const props = defineProps({
-  modelValue: false,
-})
-
-const emit = defineEmits(["update:modelValue"])
-
-const drawer = ref(props.modelValue)
+const visible = ref(false)
 const permissionStore = usePermissionStore()
 const table = tableDefaultData()
 const dialogVisible = ref(false)
@@ -87,13 +81,10 @@ const form = ref({
   name: null,
 })
 
-watch(() => props.modelValue, (v) => {
-  drawer.value = v
-})
-
-watch(drawer, (d) => {
-  emit("update:modelValue", d)
-})
+const open = () => {
+  visible.value = true
+  requestData()
+}
 
 const requestData = () => {
   table.loading = true
@@ -101,10 +92,8 @@ const requestData = () => {
     tableDataFormat(response, table)
   })
 }
-requestData()
 
 const updateRow = ref(null)
-
 const dialogAction = ref('add')
 
 const handleEdit = (row) => {
@@ -162,6 +151,8 @@ const rules = {
     { min: 1, max: 255 }
   ]
 }
+
+defineExpose({ open })
 </script>
 <style lang="scss" scoped>
 

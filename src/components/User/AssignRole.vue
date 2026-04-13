@@ -16,71 +16,46 @@
 <script setup>
 import { getUserRoles, assginRoles  } from '@/api/adminUser'
 import { guardNameRoles  } from '@/api/role'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { ElNotification } from 'element-plus'
 import { useI18n } from 'vue-i18n'
 
-const props = defineProps({
-  userId: {
-    type: Number,
-  },
-  modelValue: {
-    type: Boolean,
-    default: false,
-  },
-  guardName: {
-    type: String,
-  }
-})
-
-const emit = defineEmits(['update:modelValue'])
-
+const visible = ref(false)
 const roles = ref([])
 const userRoles = ref([])
-const visible = ref(props.modelValue)
 const i18n = useI18n()
 
-watch(() => props.modelValue, (d) => {
-  visible.value = d
+let currentUserId = null
+let currentGuardName = null
+
+const open = (userId, guardName) => {
+  currentUserId = userId
+  currentGuardName = guardName
   roles.value = []
   userRoles.value = []
+  visible.value = true
 
-  if (d) {
-    let guardRolesRequest = guardNameRoles(props.guardName)
-    let userRolesRequest = getUserRoles(props.userId, props.guardName)
+  const guardRolesRequest = guardNameRoles(guardName)
+  const userRolesRequest = getUserRoles(userId, guardName)
 
-    Promise.all([guardRolesRequest, userRolesRequest]).then( result => {
-      let roleItems = []
-      result[0].data.data.forEach( role => {
-        roleItems.push(role.name)
-      })
-
-      let userRoleItems = []
-      result[1].data.data.forEach( role => {
-        userRoleItems.push(role.name)
-      })
-
-      roles.value = roleItems
-      userRoles.value = userRoleItems
-
-    }).catch(() => {
-      visible.value = false
-    })
-  }
-})
-
-watch(visible, (v) => {
-  emit("update:modelValue", v)
-})
+  Promise.all([guardRolesRequest, userRolesRequest]).then(result => {
+    roles.value = result[0].data.data.map(r => r.name)
+    userRoles.value = result[1].data.data.map(r => r.name)
+  }).catch(() => {
+    visible.value = false
+  })
+}
 
 const assignRole = () => {
-  assginRoles(props.userId, props.guardName, userRoles.value).then( () => {
+  assginRoles(currentUserId, currentGuardName, userRoles.value).then( () => {
     visible.value = false
     ElNotification.success({
       message: i18n.t('assignRoleSuccess')
     })
   })
 }
+
+defineExpose({ open })
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
   .item {

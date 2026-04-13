@@ -1,10 +1,10 @@
 <template>
-  <el-dialog :title="title" v-model="dialogVisible"  width="500px">
+  <el-dialog :title="actionType === 'add' ? $t('add') : $t('edit')" v-model="visible" width="500px">
     <el-form :model="form" :rules="rules" ref="formRef" label-width="100px" >
       <el-form-item :label="$t('name')" prop="name">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('username')" prop="username" v-if="action ==='add'">
+      <el-form-item :label="$t('username')" prop="username" v-if="actionType ==='add'">
         <el-input v-model="form.username"></el-input>
       </el-form-item>
       <el-form-item :label="$t('password')" prop="password">
@@ -15,34 +15,20 @@
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button @click="dialogVisible = false">{{ $t('cancel') }}</el-button>
-      <el-button type="primary" @click="handleAddAdminUser" v-if="action === 'add'">{{ $t('confirm') }}</el-button>
-      <el-button type="primary" @click="handleUpdateAdminUser" v-if="action === 'edit'">{{ $t('confirm') }}</el-button>
+      <el-button @click="visible = false">{{ $t('cancel') }}</el-button>
+      <el-button type="primary" @click="handleAddAdminUser" v-if="actionType === 'add'">{{ $t('confirm') }}</el-button>
+      <el-button type="primary" @click="handleUpdateAdminUser" v-if="actionType === 'edit'">{{ $t('confirm') }}</el-button>
     </template>
   </el-dialog>
 </template>
 <script setup>
 import { addAdminUser, editAdminUser } from '@/api/adminUser'
 import notice from '@/utils/notice'
-import { ref, watch } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 
-const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false,
-  },
-  title: {
-    type: String
-  },
-  action: {
-    type: String,
-  },
-  row: {
-    type: Object,
-  }
-})
-
-const emit = defineEmits(["update:modelValue"])
+const visible = ref(false)
+const actionType = ref('add')
+let currentRow = null
 
 const formRef = ref(null)
 
@@ -53,39 +39,45 @@ const form = ref({
   status: true,
 })
 
-let rules = {
-  name: [
-    { required: true },
-    { min: 3, max: 255 }
-  ],
+const rules = computed(() => {
+  const base = {
+    name: [
+      { required: true },
+      { min: 3, max: 255 }
+    ],
+  }
+  if (actionType.value === 'add') {
+    return {
+      ...base,
+      username: [
+        { required: true },
+        { min: 5, max: 18 }
+      ],
+      password: [
+        { required: true },
+        { min: 8, max: 32 }
+      ]
+    }
+  }
+  return base
+})
+
+const open = (action = 'add', row = null) => {
+  actionType.value = action
+  if (action === 'add') {
+    form.value = { name: null, username: null, password: null, status: true }
+    nextTick(() => formRef.value?.clearValidate())
+  } else {
+    currentRow = row
+    form.value = {
+      name: row.name,
+      username: null,
+      password: null,
+      status: row.status,
+    }
+  }
+  visible.value = true
 }
-if (props.action === 'add') {
-  rules = {...rules, email: [
-    { required: true},
-    { min: 5, max: 18 }
-  ],
-  password: [
-    { required: true },
-    { min: 8, max: 32 }
-  ]}
-}
-
-const dialogVisible = ref(false)
-
-watch(() => props.modelValue, (v) => {
-  dialogVisible.value = v
-})
-
-watch(dialogVisible, (v) => {
-  emit("update:modelValue", v)
-})
-
-const id = ref(null)
-watch(() => props.row, (row) => {
-  id.value = row.id
-  form.value.name = row.name
-  form.value.status = row.status
-})
 
 const handleAddAdminUser = () => {
   formRef.value.validate((valid) => {
@@ -94,9 +86,9 @@ const handleAddAdminUser = () => {
     }
     addAdminUser(form.value).then(() => {
       notice.addSuccess()
-      dialogVisible.value = false
+      visible.value = false
       formRef.value.resetFields()
-    }) 
+    })
   })
 }
 
@@ -105,15 +97,17 @@ const handleUpdateAdminUser = () => {
     if (!valid) {
       return false
     }
-    editAdminUser(id.value, form.value).then(() => {
+    editAdminUser(currentRow.id, form.value).then(() => {
       notice.editSuccess()
-      dialogVisible.value = false
-      props.row.name = form.value.name
-      props.row.status = form.value.status
+      currentRow.name = form.value.name
+      currentRow.status = form.value.status
       form.value.password = null
-    }) 
+      visible.value = false
+    })
   })
 }
+
+defineExpose({ open })
 </script>
 <style lang="scss" scoped>
 

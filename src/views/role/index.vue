@@ -14,7 +14,7 @@
   <el-card style="margin:10px">
     <table-action :title="$t('meta.title.role')">
       <template #action>
-        <el-button type="primary" v-if="addPermission"  @click="showAddRoleDialog" :icon="Plus">{{ $t('add') }}</el-button>
+        <el-button type="primary" v-if="addPermission"  @click="roleFormDialogRef.open('add')" :icon="Plus">{{ $t('add') }}</el-button>
       </template>
     </table-action>
     <el-table
@@ -52,10 +52,10 @@
                   v-if="updatePermission"
                   type="primary"
                   :link="true"
-                  @click="showEditRoleDialog(scope.row)">{{ $t('edit') }}</el-button>
+                  @click="roleFormDialogRef.open('edit', scope.row)">{{ $t('edit') }}</el-button>
           <el-button
                   v-if="assignPermission"
-                  @click="showAssignPermissionDrawer(scope.row)"
+                  @click="roleAssignPermissionDrawerRef.open(scope.row.id, scope.row.guard_name)"
                   type="primary"
                   :link="true">{{ $t('assignPermission') }}</el-button>
           <el-popconfirm v-if="deletePermission" :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
@@ -74,40 +74,26 @@
                    :total="table.pagination.total">
     </el-pagination>
   </el-card>
-  <el-dialog :title="dialogAction == 'add' ? $t('add') : $t('edit')" v-model="dialogFormVisible"  width="500px">
-    <el-form :model="form" :rules="rules" label-width="120px" ref="formRef">
-      <el-form-item :label="$t('name')" prop="name">
-        <el-input v-model="form.name"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('guardName')" prop="guard_name">
-        <guard-select v-model="form.guard_name"></guard-select>
-      </el-form-item>
-      <el-form-item :label="$t('description')" prop="description">
-        <el-input type="textarea" v-model="form.description"></el-input>
-      </el-form-item>
-    </el-form>
-    <template #footer>
-      <el-button @click="dialogFormVisible = false">{{ $t('cancel') }}</el-button>
-      <el-button type="primary" @click="handleAddRole" v-if="dialogAction == 'add'">{{ $t('confirm') }}</el-button>
-      <el-button type="primary" @click="handleEditRole" v-if="dialogAction == 'edit'">{{ $t('confirm') }}</el-button>
-    </template>
-  </el-dialog>
-  <role-assign-permission-drawer v-model="assignPermisionDrawer" :role-id="assignPermissionRole.id" :guard-name="assignPermissionRole.guardName"></role-assign-permission-drawer>
+  <role-form-dialog ref="roleFormDialogRef" @add-success="requestData"></role-form-dialog>
+  <role-assign-permission-drawer ref="roleAssignPermissionDrawerRef"></role-assign-permission-drawer>
 </template>
 
 <script setup name="roleIndex">
-import { getRoleList, addRole, editRole, deleteRole } from '@/api/role'
+import { getRoleList, deleteRole } from '@/api/role'
 import GuardSelect from '@/components/Select/GuardSelect.vue'
 import TableAction from '@/components/Table/TableAction.vue'
 import { tableDataFormat, tableDefaultData } from '@/utils/table'
 import { ref, computed } from 'vue'
 import notice from '@/utils/notice'
+import RoleFormDialog from './RoleFormDialog.vue'
 import RoleAssignPermissionDrawer from './RoleAssignPermissionDrawer.vue'
-import { Plus, Search} from '@element-plus/icons-vue'
+import { Plus } from '@element-plus/icons-vue'
 import { usePermissionStore } from "@/store/permission"
 
 const table = tableDefaultData()
 const permissionStore = usePermissionStore()
+const roleFormDialogRef = ref(null)
+const roleAssignPermissionDrawerRef = ref(null)
 
 const requestData = () => {
   table.loading = true
@@ -118,67 +104,6 @@ const requestData = () => {
 
 requestData()
 
-const formRef = ref(null)
-const form = ref({
-  name: null,
-  guard_name: null,
-  description: null,
-})
-const dialogFormVisible = ref(false)
-
-const dialogAction = ref('add')
-
-const showAddRoleDialog = () => {
-  dialogAction.value = 'add'
-  dialogFormVisible.value = true
-  form.value = {
-    name: null,
-    guard_name: null,
-    description: null,
-  }
-}
-
-const updateRow = ref({})
-
-const showEditRoleDialog = (row) => {
-  dialogAction.value = 'edit'
-  dialogFormVisible.value = true
-  form.value = {
-    name: row.name,
-    guard_name: row.guard_name,
-    description: row.description,
-  }
-  updateRow.value = row
-}
-
-const handleAddRole = () => {
-  formRef.value.validate((valid) => {
-    if (!valid) {
-      return false
-    }
-    
-    addRole(form.value).then(() => {
-      notice.addSuccess()
-      dialogFormVisible.value = false
-    })
-  })
-}
-
-const handleEditRole = () => {
-  formRef.value.validate((valid) => {
-    if (!valid) {
-      return false
-    }
-    editRole(updateRow.value.id, form.value).then(() => {
-      notice.editSuccess()
-      updateRow.value.name = form.value.name
-      updateRow.value.guard_name = form.value.guard_name
-      updateRow.value.description = form.value.description
-      dialogFormVisible.value = false
-    })
-  })
-}
-
 const handleDelete = (index, row) => {
   deleteRole(row.id).then( () => {
     notice.deleteSuccess()
@@ -186,29 +111,8 @@ const handleDelete = (index, row) => {
   })
 }
 
-const assignPermisionDrawer = ref(false)
-const assignPermissionRole = ref({
-  id: 0,
-  guardName: null,
-})
-const showAssignPermissionDrawer = (row) => {
-  assignPermisionDrawer.value = true
-  assignPermissionRole.value.id = row.id
-  assignPermissionRole.value.guardName = row.guard_name
-}
-
 const updatePermission = computed(() => permissionStore.hasPermission('role.update'))
 const addPermission = computed(() => permissionStore.hasPermission('role.store'))
 const deletePermission = computed(() => permissionStore.hasPermission('role.destroy'))
 const assignPermission = computed(() => permissionStore.hasPermission('role.assign-permissions'))
-const rules = {
-  name: [
-    { required: true },
-    { min: 1, max: 255 }
-  ],
-  guard_name: [
-    { required: true },
-    { min: 1, max: 255 }
-  ]
-}
 </script>

@@ -68,7 +68,7 @@
       </el-table-column>
     </el-table>
   </el-card>
-  <menu-form-drawer :row="updateRow" v-model="showFormDrawer" :action="formAction"></menu-form-drawer>
+  <menu-form-drawer ref="menuFormDrawerRef"></menu-form-drawer>
 </template>
 
 <script setup name="menuIndex">
@@ -81,7 +81,7 @@ import { tableDefaultData } from '@/utils/table'
 import notice from '@/utils/notice'
 import { usePermissionStore } from "@/store/permission"
 
-const showFormDrawer = ref(false)
+const menuFormDrawerRef = ref(null)
 const permissionStore = usePermissionStore()
 const table = tableDefaultData()
 
@@ -102,17 +102,12 @@ const handleDelete = (index, row) => {
   })
 }
 
-const formAction = ref('add')
-const updateRow = ref(null)
 const handleEdit = (row) => {
-  showFormDrawer.value = true
-  formAction.value = 'edit'
-  updateRow.value = row
+  menuFormDrawerRef.value.open('edit', row)
 }
 
 const handleAdd = () => {
-  showFormDrawer.value = true
-  formAction.value = 'add'
+  menuFormDrawerRef.value.open('add')
 }
 
 const hasAddPermission = computed(() => permissionStore.hasPermission("menu.store"))

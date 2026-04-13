@@ -17,7 +17,7 @@
   <el-card style="margin:10px;">
     <table-action :title="$t('meta.title.adminUser')">
       <template #action>
-        <el-button type="primary" v-if="hasAddPermission"  @click="addDialogVisible = true">{{ $t('add') }}</el-button>
+        <el-button type="primary" v-if="hasAddPermission"  @click="adminUserFormDialogRef.open('add')">{{ $t('add') }}</el-button>
       </template>
     </table-action>
     <el-table
@@ -80,9 +80,8 @@
                    :total="table.pagination.total">
     </el-pagination>
   </el-card>
-  <user-assign-role :user-id="assignRole.id" :guard-name="assignRole.guardName" v-model="assignRole.dialogVisible"></user-assign-role>
-  <admin-user-form-dialog :title="$t('add')" action="add" v-model="addDialogVisible"></admin-user-form-dialog>
-  <admin-user-form-dialog :title="$t('edit')" :row="updateRow" action="edit" v-model="editDialogVisible"></admin-user-form-dialog>
+  <user-assign-role ref="userAssignRoleRef"></user-assign-role>
+  <admin-user-form-dialog ref="adminUserFormDialogRef"></admin-user-form-dialog>
 </template>
 
 <script setup name="adminUserIndex">
@@ -96,14 +95,12 @@ import notice from '@/utils/notice'
 import {usePermissionStore} from "@/store/permission";
 
 const permissionStore = usePermissionStore()
-const addDialogVisible = ref(false)
-const editDialogVisible = ref(false)
+const adminUserFormDialogRef = ref(null)
+const userAssignRoleRef = ref(null)
 const table = tableDefaultData()
 
-const updateRow = ref({})
 const handleEdit = (row) => {
-  editDialogVisible.value = true
-  updateRow.value = row
+  adminUserFormDialogRef.value.open('edit', row)
 }
 
 const requestData = () => {
@@ -122,15 +119,8 @@ const handleDelete = (index, row) => {
   })
 }
 
-const assignRole = ref({
-  id: 0,
-  guardName: 'admin',
-  dialogVisible: false,
-})
-
 const handleAssignRole = (row) => {
-  assignRole.value.id = row.id
-  assignRole.value.dialogVisible = true
+  userAssignRoleRef.value.open(row.id, 'admin')
 }
 
 const hasAddPermission = computed(() => permissionStore.hasPermission("admin-user.store"))
