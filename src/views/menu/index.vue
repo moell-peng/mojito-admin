@@ -59,9 +59,9 @@
                   type="primary"
                   :link="true"
                   @click="handleEdit(scope.row)">{{ $t('edit') }}</el-button>
-          <el-popconfirm v-permission="'menu.destroy'" :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
+          <el-popconfirm :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
             <template #reference>
-              <el-button type="danger" :link="true">{{ $t('delete') }}</el-button>
+              <el-button v-permission="'menu.destroy'" type="danger" :link="true">{{ $t('delete') }}</el-button>
             </template>
           </el-popconfirm>
         </template>
@@ -76,7 +76,7 @@ import GuardSelect from '@/components/Select/GuardSelect.vue'
 import { getMenuList, deleteMenu } from '@/api/menu'
 import TableAction from '@/components/Table/TableAction.vue'
 import MenuFormDrawer from './components/MenuFormDrawer.vue'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { tableDefaultData } from '@/utils/table'
 import notice from '@/utils/notice'
 const menuFormDrawerRef = ref(null)
@@ -90,7 +90,9 @@ const requestData = () => {
   })
 }
 
-requestData()
+onMounted(() => {
+  requestData()
+})
 
 const handleDelete = (index, row) => {
   deleteMenu(row.id).then( () => {

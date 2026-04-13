@@ -58,9 +58,9 @@
                   @click="roleAssignPermissionDrawerRef.open(scope.row.id, scope.row.guard_name)"
                   type="primary"
                   :link="true">{{ $t('assignPermission') }}</el-button>
-          <el-popconfirm v-permission="'role.destroy'" :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
+          <el-popconfirm :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
             <template #reference>
-              <el-button type="danger" :link="true">{{ $t('delete') }}</el-button>
+              <el-button v-permission="'role.destroy'" type="danger" :link="true">{{ $t('delete') }}</el-button>
             </template>
           </el-popconfirm>
         </template>
@@ -83,7 +83,7 @@ import { getRoleList, deleteRole } from '@/api/role'
 import GuardSelect from '@/components/Select/GuardSelect.vue'
 import TableAction from '@/components/Table/TableAction.vue'
 import { tableDataFormat, tableDefaultData } from '@/utils/table'
-import { ref } from 'vue'
+import {onMounted, ref} from 'vue'
 import notice from '@/utils/notice'
 import RoleFormDialog from './components/RoleFormDialog.vue'
 import RoleAssignPermissionDrawer from './components/RoleAssignPermissionDrawer.vue'
@@ -99,7 +99,9 @@ const requestData = () => {
   })
 }
 
-requestData()
+onMounted(() => {
+  requestData()
+})
 
 const handleDelete = (index, row) => {
   deleteRole(row.id).then( () => {

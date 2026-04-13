@@ -11,7 +11,7 @@
 <script setup>
 import { getNodeParentPath } from '@/utils/helper'
 import { getMenuList } from '@/api/menu'
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 
 const props = defineProps({
   modelValue: {
@@ -49,7 +49,9 @@ const requestData = () => {
   }
 }
 
-requestData()
+onMounted(() => {
+  requestData()
+})
 
 watch(optionValue, (ids) => {
   let id = ids ? ids[ids.length - 1] : 0

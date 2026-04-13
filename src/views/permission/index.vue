@@ -60,9 +60,9 @@
                   type="primary"
                   :link="true"
                   @click="handleEdit(scope.row)">{{ $t('edit') }}</el-button>
-          <el-popconfirm v-permission="'permission.destroy'" :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
+          <el-popconfirm  :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
             <template #reference>
-              <el-button  type="danger" :link="true">{{ $t('delete') }}</el-button>
+              <el-button v-permission="'permission.destroy'"  type="danger" :link="true">{{ $t('delete') }}</el-button>
             </template>
           </el-popconfirm>
         </template>
@@ -85,7 +85,7 @@ import { deletePermission, getPermissionList } from '@/api/permission'
 import GuardSelect from '@/components/Select/GuardSelect.vue'
 import PermissionGroupSelect from "@/components/Select/PermissionGroupSelect.vue"
 import TableAction from '@/components/Table/TableAction.vue'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import PermissionFormDrawer from './components/PermissionFormDrawer.vue'
 import PermissionGroupDrawer from './components/PermissionGroupDrawer.vue'
 import { tableDefaultData, tableDataFormat } from '@/utils/table'
@@ -102,7 +102,9 @@ const requestData = () => {
   })
 }
 
-requestData()
+onMounted(() => {
+  requestData()
+})
 
 const handleAdd = () => {
   permissionFormDrawerRef.value.open('add')

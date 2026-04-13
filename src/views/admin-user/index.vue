@@ -64,9 +64,9 @@
                   type="primary"
                   :link="true"
                   @click="handleAssignRole(scope.row)">{{ $t('assignRole') }}</el-button>
-          <el-popconfirm v-permission="'admin-user.destroy'" :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
+          <el-popconfirm :title="$t('confirmDelete')" @confirm="handleDelete(scope.$index, scope.row)">
             <template #reference>
-              <el-button type="danger" :link="true">{{ $t('delete') }}</el-button>
+              <el-button v-permission="'admin-user.destroy'" type="danger" :link="true">{{ $t('delete') }}</el-button>
             </template>
           </el-popconfirm>
         </template>
@@ -88,7 +88,7 @@
 import { getAdminUserList, deleteAdminUser } from '@/api/adminUser'
 import UserAssignRole from '@/components/User/AssignRole.vue'
 import TableAction from '@/components/Table/TableAction.vue'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import AdminUserFormDialog from './components/AdminUserFormDialog.vue'
 import { tableDataFormat, tableDefaultData } from '@/utils/table'
 import notice from '@/utils/notice'
@@ -107,7 +107,9 @@ const requestData = () => {
   })
 }
 
-requestData()
+onMounted(() => {
+  requestData()
+})
 
 const handleDelete = (index, row) => {
   deleteAdminUser(row.id).then( () => {
