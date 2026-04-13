@@ -6,10 +6,10 @@
           <el-input v-model="table.queryParams.name" :placeholder="$t('name')" clearable></el-input>
         </div>
         <div class="search-item">
-          <permission-group-select v-model="table.queryParams.pg_id"></permission-group-select>
+          <permission-group-select v-model="table.queryParams.pg_id" style="width: 200px"></permission-group-select>
         </div>
         <div class="search-item">
-          <guard-select v-model="table.queryParams.guard_name" :placeholder="$t('guardName')"></guard-select>
+          <guard-select v-model="table.queryParams.guard_name" :placeholder="$t('guardName')" style="width: 200px"></guard-select>
         </div>
         <div class="search-item">
           <el-button type="primary" @click="requestData">{{ $t('search') }}</el-button>
